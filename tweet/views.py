@@ -40,12 +40,19 @@ def create_post(request):
 
 # 게시글 수정
 # @login_required
-def set_post(request):
+def set_post(request,post_id):
+    url = request.POST.get('url', '')
+    title = request.POST.get('title', '')
+    comment = request.POST.get('comment', '')
+
+
+    post = Post.objects.get(id=post_id)
+    context = {}
     if request.method == 'GET':
-        pass
+        context['post'] = post
+        return render(request,'tweet/set_post.html',context)
     elif request.method == 'POST':
         pass
-    pass
 
 # 게시글 삭제
 # @login_required
