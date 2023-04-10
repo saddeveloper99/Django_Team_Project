@@ -2,9 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>게시글 작성 페이지</title>
 </head>
 <body>
-hello post!
+<form method="post" action="/tweet/create-post/">
+    {% csrf_token %}
+    {#필요한 데이터#}
+    {#url#}
+    {#title#}
+    {#comment#}
+    <label for="input_url">썸네일:</label>
+    <input type="text" id="url" name="url" placeholder="썸네일 이미지 URL을 입력해주세요." required><br>
+    <label for="input_title">제목:</label>
+    <input type="text" id="title" name="title" placeholder="게시글 제목을 입력해주세요." required><br>
+    <label for="input_comment">내용:</label>
+    <input type="text" id="comment" name="comment" placeholder="게시글 내용을 입력해주세요." required><br>
+    <button type="submit">등록</button>
+    {% if error %}
+        <div>
+            {{ error }}
+        </div>
+    {% endif %}
+</form>
 </body>
 </html>
