@@ -1,7 +1,15 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from .models import Post
 
+def home(request):
+    """
+    메인페이지
+    유저 정보 인증 후 경로 설정
+    """
+
+    return render(request, "tweet/home.html")
 
 #게시글 작성
 # @login_required
@@ -75,3 +83,4 @@ def delete_post(request,post_id):
         # 삭제하고난 다음, 소유자의 모든 post를 조회한다.
         post = Post.objects.filter(id=owner)
         # return render(request,'마이 페이지.html',post)
+    return render(request, 'tweet/create_post.html')
