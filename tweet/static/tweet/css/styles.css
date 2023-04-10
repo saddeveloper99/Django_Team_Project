@@ -1,0 +1,15 @@
+.logo {
+    display: flex;
+    margin: 0 46%;
+    width: 200px;
+    height: 70px;
+    background-image: url("../image/logo-camu.png");
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    background-position: center;
+    filter: invert(100%);
+}
+
+.timeline-container {
+    margin-top: 100px;
+}
