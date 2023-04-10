@@ -31,6 +31,7 @@ def create_post(request):
         comment = request.POST.get('comment','')
         owner = request.user.id
 
+
         # 데이터 검사
         if not all([url,title,comment]):
             return render(request, 'tweet/create_post.html',context)
@@ -42,9 +43,9 @@ def create_post(request):
         # my_post = Post.objects.filter(id=owner).order_by('-create_at')
         # context.update(my_post)
 
-        # 게시글 저장후, 마이페이지로 이동
+        # 게시글 저장후, 상세페이지로 이동
         return render(request,'tweet/create_post.html')
-        # return render(request,'마이페이지.html',{'context':context})
+        # return render(request,'상세페이지.html',{'context':context})
 
 # 게시글 수정
 # @login_required
@@ -58,7 +59,7 @@ def set_post(request,post_id):
     context = {}
     if request.method == 'GET':
         context['post'] = post
-        return render(request,'tweet/set_post.html',context)
+        return render(request, 'tweet/set_post.html', context)
     elif request.method == 'POST':
         pass
 
