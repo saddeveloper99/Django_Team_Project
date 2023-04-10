@@ -11,12 +11,15 @@
     {#url#}
     {#title#}
     {#comment#}
-    <label for="input_url">썸네일:</label>
-    <input type="text" id="url" name="url" placeholder="썸네일 이미지 URL을 입력해주세요." required><br>
-    <label for="input_title">제목:</label>
-    <input type="text" id="title" name="title" placeholder="게시글 제목을 입력해주세요." required><br>
-    <label for="input_comment">내용:</label>
-    <input type="text" id="comment" name="comment" placeholder="게시글 내용을 입력해주세요." required><br>
+    <label for="input_url">썸네일:</label><br>
+    <textarea name="url" cols="150" rows="2" placeholder="썸네일 이미지 URL을 입력해주세요."></textarea>
+    <br>
+    <label for="input_title">제목:</label><br>
+    <textarea name="title" cols="150" rows="2" placeholder="게시글 제을 입력해주세요."></textarea>
+    <br>
+    <label for="comment">내용:</label><br>
+    <textarea name="comment" cols="150" rows="5" placeholder="게시글 내용을 입력해주세요."></textarea>
+    <br>
     <button type="submit">등록</button>
     {% if error %}
         <div>

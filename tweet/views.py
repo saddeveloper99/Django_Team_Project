@@ -21,19 +21,50 @@ def create_post(request):
         url = request.POST.get('url','')
         title = request.POST.get('title','')
         comment = request.POST.get('comment','')
-        owner = request.user
+        owner = request.user.id
 
         # 데이터 검사
         if not all([url,title,comment]):
             return render(request, 'tweet/create_post.html',context)
 
         # 게시글 저장
-        # new_post = Post.objects.create(id2=owner,url=url,title=title,comment=comment)
+        # new_post = Post.objects.create(id=owner,url=url,title=title,comment=comment)
 
         # # 나의 게시글 목록 가져오기, 정렬은 수정 순서가 아닌 생성시간 기준
-        # my_post = Post.objects.filter(id2=owner).order_by('-create_at')
+        # my_post = Post.objects.filter(id=owner).order_by('-create_at')
         # context.update(my_post)
 
         # 게시글 저장후, 마이페이지로 이동
         return render(request,'tweet/create_post.html')
-        # return render(request,'tweet/create_post.html',{'context':context})
+        # return render(request,'마이페이지.html',{'context':context})
+
+# 게시글 수정
+# @login_required
+def set_post(request):
+    if request.method == 'GET':
+        pass
+    elif request.method == 'POST':
+        pass
+    pass
+
+# 게시글 삭제
+# @login_required
+def delete_post(request,post_id):
+    if request.method == 'GET':
+        return redirect('/')
+    elif request.method =='POST':
+        # 선택한 post_id의 id값을 읽어온다.
+        try:
+            owner = Post.objects.get(id = post_id)
+        except:
+            return redirect('/')
+
+        # 현재 접근한 유저와, 소유자의  id와 같은지 판별하고 데이터를 삭제한다.
+        if request.user.id == owner.id:
+            owner.delete()
+        else:
+            return redirect('/')
+
+        # 삭제하고난 다음, 소유자의 모든 post를 조회한다.
+        post = Post.objects.filter(id=owner)
+        # return render(request,'마이 페이지.html',post)
