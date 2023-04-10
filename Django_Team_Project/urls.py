@@ -1,8 +1,8 @@
 
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('tweet/',include('tweet.urls')), # tweet app urls 연결
+    path('', include('tweet.urls')),  # tweet app urls 연결
 ]
