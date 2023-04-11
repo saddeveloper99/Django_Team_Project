@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from django.contrib.auth import get_user_model #사용자가 있는지 검사하는 함수
 from django.contrib import auth # 사용자 auth 기능
 from django.contrib import messages
+from django.core.files.storage import FileSystemStorage
+import random
 
 # Create your views here.
 def sign_up_view(request):
@@ -18,6 +20,14 @@ def sign_up_view(request):
         username = request.POST.get('username', None)
         password = request.POST.get('password', None)
         password2 = request.POST.get('password2', None)
+        
+        
+        
+        try:
+            profile_image = request.FILES['profile-image']
+        except:
+            profile_image = None
+        
 
         if password != password2:
             # messages.error(self.request, '비밀번호를 다시 확인해주세요!', extra_tags='danger') # 메세지창 추가
@@ -27,7 +37,23 @@ def sign_up_view(request):
             if exist_user:
                 return render(request, 'user/signup.html')  # 사용자가 존재하기 때문에 사용자를 저장하지 않고 회원가입 페이지를 다시 띄움
             else:
-                UserModel.objects.create_user(username=username, password=password)
+                new_user = UserModel.objects.create_user(username=username, password=password)
+                if profile_image:
+                    # 프로필사진 파일에 랜덤성 부여!
+                    profile_image.name = 'user' + str(new_user.user_id) + '_' + str(random.randint(10000,100000)) + '.' + str(profile_image.name.split('.')[-1])
+                    
+                    # 파일 저장
+                    file_system_storage = FileSystemStorage()
+                    fs = file_system_storage.save(profile_image.name, profile_image)
+                    
+                    # 저장한 파일 url 따기
+                    uploaded_file_url = file_system_storage.url(fs)
+                    
+                    # 신규 회원의 user_id 따고 업데이트
+                    check = UserModel.objects.filter(user_id = new_user.user_id)
+                    check.update(image=uploaded_file_url)
+                    
+
                 return redirect('/sign-in')  # 회원가입이 완료되었으므로 로그인 페이지로 이동
 
 

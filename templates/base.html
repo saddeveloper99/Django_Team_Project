@@ -32,7 +32,23 @@
         <a class="logo" href="/"></a>
         </div>
         <!-- 상단 로고 end -->    
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and user.image %}
+        <div class="menu">
+          <li class="nav-item dropdown">
+            <div class="box" href="#" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
+              <img class="profile" src={{ user.image }}>
+            </div>
+            <a class="nav-link dropdown-toggle" href="#" role="button" style="color: white;" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ user.username }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu" style="padding: 5px;">
+              <li><a class="dropdown-item" href="create-post/">글쓰기</a></li>
+              <li><a class="dropdown-item" href="#">프로필 수정</a></li>
+              <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
+            </ul>
+          </li>
+        </div>
+        {% elif user.is_authenticated and not user.image %}
         <div class="menu">
           <li class="nav-item dropdown">
             <div class="box" href="#" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
@@ -49,6 +65,7 @@
           </li>
         </div>
         {% endif %}
+
       </div>
     </div>
     <div class="main-content">
