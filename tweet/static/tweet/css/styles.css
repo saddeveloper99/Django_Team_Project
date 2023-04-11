@@ -17,7 +17,7 @@ p {
 }
 
 .cover {
-    height: 100vh;
+    height: 70vh;
 }
 
 
@@ -96,6 +96,11 @@ p {
     object-fit: cover;
 }
 
-/* nav bar part end */
+.main-content {
+    display: block;
+    margin: 200px auto;
+    width: 70%;
+    height: 70%;
+}
 
-.content-main {}
+/* nav bar part end */

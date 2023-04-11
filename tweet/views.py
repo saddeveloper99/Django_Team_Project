@@ -6,12 +6,11 @@ from .models import Post
 from user.models import UserModel
 from django.urls import reverse
 def home(request):
-    """
-    메인페이지
-    유저 정보 인증 후 경로 설정
-    """
-
-    return render(request, "tweet/home.html")
+    user = request.user.is_authenticated
+    if user:
+        return render(request, 'tweet/home.html')
+    else:
+        return redirect('/sign-in')
 
 #게시글 작성 ,login_required를 사용하는대신, 사용자를 로그인 페이지로 이동시킨다.
 def create_post(request):
