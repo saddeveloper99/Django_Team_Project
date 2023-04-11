@@ -32,6 +32,7 @@
         <a class="logo" href="/"></a>
         </div>
         <!-- 상단 로고 end -->    
+        {% if user.is_authenticated %}
         <div class="menu">
           <li class="nav-item dropdown">
             <div class="box" href="#" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
@@ -41,16 +42,20 @@
               김치만두
             </a>
             <ul class="dropdown-menu dropdown-menu" style="padding: 5px;">
-              <li><a class="dropdown-item" href="#">글쓰기</a></li>
+              <li><a class="dropdown-item" href="create-post/">글쓰기</a></li>
               <li><a class="dropdown-item" href="#">프로필 수정</a></li>
-              <li><a class="dropdown-item" href="#">로그아웃</a></li>
+              <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
             </ul>
           </li>
         </div>
+        {% endif %}
       </div>
+    </div>
+    <div class="main-content">
     {% block content %}
       <!-- content -->
     {% endblock %}
+    </div>
   </div>
 </body>
 </html>

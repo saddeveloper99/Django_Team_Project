@@ -5,12 +5,11 @@ from django.contrib import auth
 from .models import Post
 
 def home(request):
-    """
-    메인페이지
-    유저 정보 인증 후 경로 설정
-    """
-
-    return render(request, "tweet/home.html")
+    user = request.user.is_authenticated
+    if user:
+        return render(request, 'tweet/home.html')
+    else:
+        return redirect('/sign-in')
 
 #게시글 작성
 # @login_required
