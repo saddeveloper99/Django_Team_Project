@@ -1,10 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import UserModel
-from django.http import HttpResponse
 from django.contrib.auth import get_user_model #사용자가 있는지 검사하는 함수
 from django.contrib import auth # 사용자 auth 기능
-from django.contrib import messages
 
 # Create your views here.
 def sign_up_view(request):
@@ -19,9 +17,10 @@ def sign_up_view(request):
         password = request.POST.get('password', None)
         password2 = request.POST.get('password2', None)
 
+        res_data = {}
         if password != password2:
-            # messages.error(self.request, '비밀번호를 다시 확인해주세요!', extra_tags='danger') # 메세지창 추가
-            return render(request, 'user/signup.html')
+            res_data['error'] = '비밀번호가 다릅니다. 다시 입력바랍니다.'
+            return render(request, 'user/signup.html', res_data)
         else:
             exist_user = get_user_model().objects.filter(username=username)
             if exist_user:
@@ -37,12 +36,13 @@ def sign_in_view(request):
         password = request.POST.get('password', None)
 
         me = auth.authenticate(request, username=username, password=password)  # 사용자 불러오기
+        res_data = {}
         if me is not None:  # 저장된 사용자의 패스워드와 입력받은 패스워드 비교
             auth.login(request, me)
             return redirect('/') # 로그인 성공 시 홈화면으로 가기
         else: # 로그인 실패 시 로그인 페이지 보여주기
-            errMsg['error'] = "다시 입력하세요"
-            return redirect('/sign-in')
+            res_data['error'] = '아이디 또는 비밀번호가 일치하지 않습니다.'
+            return render(request, 'user/signin.html', res_data)
     elif request.method == 'GET':
         user = request.user.is_authenticated  # 사용자가 로그인 되어 있는지 검사
         if user:  # 로그인이 되어 있다면
@@ -57,4 +57,3 @@ def sign_in_view(request):
 def logout(request):
     auth.logout(request) # 인증 되어있는 정보를 없애기
     return redirect("/")
-#111
