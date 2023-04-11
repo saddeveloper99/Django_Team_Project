@@ -5,7 +5,7 @@ from user.models import UserModel
 class Post(models.Model):
     class Meta:
         db_table = 'post'
-    user_id = models.ForeignKey(UserModel,on_delete=models.CASCADE)
+    owner = models.ForeignKey(UserModel,on_delete=models.CASCADE)
     post_id = models.AutoField(primary_key=True)
     url = models.URLField(max_length=200)
     title = models.CharField(max_length=20)

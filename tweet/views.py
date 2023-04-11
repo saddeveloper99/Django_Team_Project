@@ -29,11 +29,11 @@ def create_post(request):
         url = request.POST.get('url','')
         title = request.POST.get('title','')
         comment = request.POST.get('comment','')
-        owner = auth.get_user(request).user_id
+        owner = auth.get_user(request).user_id # son
 
         #접근한 유저가 UserModel에 등록된 사용자가 아닐경우 방지
         try :
-            owner = UserModel.objects.get(user_id=owner)
+            owner = UserModel.objects.get(user_id=owner) # 오브젝트 포링키에 있는지
         except UserModel.DoesNotExist:
             return redirect('/')
 
@@ -41,9 +41,9 @@ def create_post(request):
         if not all([url,title,comment]):
             return render(request, 'tweet/create_post.html',{'error':'빈칸 없이 입력해주세요.'})
 
-        # 게시글 저장,
-        new_post = Post.objects.create(user_id=owner,url=url,title=title,comment=comment)
+        # 게시글 저장, # usermodeml 연결한 값 : user _id
 
+        new_post = Post.objects.create(user_id=owner,url=url,title=title,comment=comment)
         # # 나의 게시글 목록 가져오기, 정렬은 수정 순서가 아닌 생성시간 기준
         my_post = Post.objects.filter(user_id=owner).order_by('-create_at')
 
@@ -52,26 +52,50 @@ def create_post(request):
         # return render(request,'상세페이지.html',{'my_post':my_post})
 
 # 게시글 수정
-# @login_required
 def set_post(request,post_id):
+    test = Post.objects.all()
+    for i in test:
+        print(i.post_id)
+
+    print(post_id)
+
     #게시글이 없을 경우 방지
     try:
         post = Post.objects.get(post_id=post_id)
     except Post.DoesNotExist:
         return redirect('/')
+    # 지급 현재 작업영역 계십니다.
+    # 저장소에 최신 정보가 업데이트됬습니다.
 
+    # 현재 브렌치에서 커밋하시고
+    # 마스터로 체크아웃
+    # 풀로 최신 정보 업데이트하시고
+    # 브렌치랑 마스터 병합시고
+    # 커밋하시고
+    # 브렌치만들어서 작업
 
-    context = {}
+    print("통과!")
+    #작성가 아닌 유저의 접근 방지
+    user = auth.get_user(request)
+    print(user.user_id) # 이름 user name
+    print(post.user_id) # id
+    print(post.user_id.user_id) # id
+    if post.user_id !=  user.user_id:
+        return redirect('/')
+    print("두번째 통과!")
+    # GET요청의경우, 이전에 작성해둔 post의 데이터와 함께 html을 출력한다.
     if request.method == 'GET':
-        context['post'] = post
-        return render(request, 'tweet/set_post.html', context)
+        return render(request, 'tweet/set_post.html', {'post':post})
+
+    # POST의경우 전달된 데이터를 토대로 게시글 수정
     elif request.method == 'POST':
         post.url = request.POST.get('url','')
         post.title = request.POST.get('title','')
         post.comment = request.POST.get('comment','')
         post.save()
 
-        post = Post.objects.filter(post_id=post_id)
+        # 자신이 작성한 포스트의, 수정 순서가 아닌 최신 게시글 작성 순서로 정렬한다.
+        post = Post.objects.filter(post_id=post_id).order_by('-create_at')
         return redirect('/')
         # return render(request, '상세페이지.html', {'post': post})
 
