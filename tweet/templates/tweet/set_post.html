@@ -1,3 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}
+    메인페이지
+{% endblock %}
+
+{% block set-post %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,12 +11,8 @@
     <title>게시글 수정 페이지</title>
 </head>
 <body>
-<form method="post" action="/tweet/set-post/">
+<form method="post" action="{% url 'set-post' post.post_id %}" style="margin-top: 100px">
     {% csrf_token %}
-    {#필요한 데이터#}
-    {#url#}
-    {#title#}
-    {#comment#}
     <input type="hidden" name = "post_id" value="{{ post.id }}">
     <label for="input_url">썸네일:</label><br>
     <textarea name="url" cols="150" rows="2"  >{{ post.url }}</textarea>
@@ -30,3 +32,4 @@
 </form>
 </body>
 </html>
+{% endblock %}
