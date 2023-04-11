@@ -85,3 +85,27 @@ def delete_post(request,post_id):
         post = Post.objects.filter(id=owner)
         # return render(request,'마이 페이지.html',post)
     return render(request, 'tweet/create_post.html')
+
+
+def my_page(request, user_id):
+    # get일때, 유저 정보와 게시글들을 불러옴
+    if request.method == "GET":
+        me = request.user
+        # id로 선택한 유저의 정보를 가져옴
+        click_user = UserModel.objects.get(id=user_id)
+        # 유저 id가 post의 id2(fk)인 post를 가져와서 
+        post = Post.objects.filter(id2=click_user).order_by('create_at')
+        return render(request, 'tweet/my_page.html', {'click_user': click_user, 'post': post})
+
+def edit_profile(request):
+    if request.method == "POST":
+        user = UserModel.objects.get(id=id)
+
+        if request.user.id == user:
+            
+            # 폼데이터로 갱신
+            user.save()
+            
+    elif request.method == "GET":
+        user = UserModel.objects.get(id=request.user.id)
+        return render(request, {'user': user})
