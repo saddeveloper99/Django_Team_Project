@@ -39,7 +39,7 @@
               <img class="profile" src={% static 'tweet/image/user_image.png' %}>
             </div>
             <a class="nav-link dropdown-toggle" href="#" role="button" style="color: white;" data-bs-toggle="dropdown" aria-expanded="false">
-              김치만두
+              {{ user.username }}
             </a>
             <ul class="dropdown-menu dropdown-menu" style="padding: 5px;">
               <li><a class="dropdown-item" href="create-post/">글쓰기</a></li>
