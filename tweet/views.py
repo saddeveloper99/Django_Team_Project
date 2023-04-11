@@ -118,6 +118,18 @@ def edit_profile(request):
     elif request.method == "GET":
         user = UserModel.objects.get(id=request.user.id)
         return render(request, {'user': user})
-    
-def post_detail(request, user_id):
-    return render(request, 'tweet/post_detail.html')
+"""  
+def post_detail(request):
+    if request.method == 'GET':
+        return render(request, 'tweet/post_detail.html') #로그인 하지 않아도 상세페이지 열람가능
+    elif request.method == 'POST':
+        user = request.user 
+        if user.is_authenticated:
+            if 로그인 유저와 게시글 작성자가 같다면 :
+                return redirect (수정페이지)
+            else :
+                return HttpResponse("작성자만 수정할 수 있습니다.") # 수정버튼이 아예 안 보이는 것으로 수정해야함.
+        else:
+            return redirect('sign-in')
+"""
+
