@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib import auth
 from .models import Post
-
+from user.models import UserModel
+from django.urls import reverse
 def home(request):
     """
     메인페이지
@@ -13,11 +14,11 @@ def home(request):
     return render(request, "tweet/home.html")
 
 #게시글 작성
-# @login_required
 def create_post(request):
-    # user = auth.get_user(request)
-    # if user:
-    #     return redirect('sign-in/')
+    #접근한 사용자가 로그인한 유저가 아니라면 로그인 페이지로 이동한다.
+    user = request.user.is_authenticated
+    if not user:
+        return redirect(reverse('sign-in'))
 
     #HTML 출력
     if request.method == 'GET':
@@ -28,24 +29,27 @@ def create_post(request):
         url = request.POST.get('url','')
         title = request.POST.get('title','')
         comment = request.POST.get('comment','')
-        owner = auth.get_user(request).id2
-        # owner = UserModel.objects.get(id=owner)
+        owner = auth.get_user(request).user_id
 
+        #접근한 유저가 UserModel에 등록된 사용자가 아닐경우 방지
+        try :
+            owner = UserModel.objects.get(user_id=owner)
+        except UserModel.DoesNotExist:
+            return redirect('/')
 
         # 데이터 검사
         if not all([url,title,comment]):
             return render(request, 'tweet/create_post.html',{'error':'빈칸 없이 입력해주세요.'})
 
-        # 게시글 저장
-        # new_post = Post.objects.create(id=owner,url=url,title=title,comment=comment)
+        # 게시글 저장,
+        new_post = Post.objects.create(user_id=owner,url=url,title=title,comment=comment)
 
         # # 나의 게시글 목록 가져오기, 정렬은 수정 순서가 아닌 생성시간 기준
-        # my_post = Post.objects.filter(id=owner).order_by('-create_at')
-        # context.update(my_post)
+        my_post = Post.objects.filter(user_id=owner).order_by('-create_at')
 
         # 게시글 저장후, 상세페이지로 이동
         return render(request,'tweet/create_post.html')
-        # return render(request,'상세페이지.html',{'context':context})
+        # return render(request,'상세페이지.html',{'my_post':my_post})
 
 # 게시글 수정
 # @login_required
