@@ -29,9 +29,13 @@ def create_post(request):
         url = request.POST.get('url','')
         title = request.POST.get('title','')
         comment = request.POST.get('comment','')
-        owner = auth.get_user(request).id2
-        # owner = UserModel.objects.get(id=owner)
+        owner = auth.get_user(request).user_id
 
+        #접근한 유저가 UserModel에 등록된 사용자가 아닐경우 방지
+        try :
+            owner = UserModel.objects.get(user_id=owner)
+        except UserModel.DoesNotExist:
+            return redirect('/')
 
         # 데이터 검사
         if not all([url,title,comment]):
