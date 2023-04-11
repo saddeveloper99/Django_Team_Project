@@ -128,12 +128,22 @@ def edit_profile(request):
         user = UserModel.objects.get(id=request.user.id)
         return render(request, {'user': user})
     
+
 def post_detail(request, post_id):
     if request.method == 'GET':
-        post = Post.objects.get(post_id=post_id)
-        print(post)
-        return render(request, 'tweet/post_detail.html') #post_id를 받아와서 게시글 클릭하면 상세페이지로
+        try:
+            post = Post.objects.get(post_id=post_id)
+        except Post.DoesNotExist:
+            return redirect('/')  #혹시 상세페이지 접속했을 때 게시글이 없다면 redirect
+
+        return render(request, 'tweet/post_detail.html',{'post':post}) #post_id를 받아와서 게시글 클릭하면 상세페이지로
     
         #수정을 누르면 수정url로 이동
         #삭제를 누르면 삭제url로 이동
         #썸네일 이미지를 url로 출력
+        
+        #form
+        # <form method="POST" action= "{% url 'set-post' %}">
+        # {% csrf_token %}
+        # <button type="submit">수정</button>
+        # </form>
