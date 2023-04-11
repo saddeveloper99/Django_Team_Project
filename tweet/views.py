@@ -118,3 +118,6 @@ def edit_profile(request):
     elif request.method == "GET":
         user = UserModel.objects.get(id=request.user.id)
         return render(request, {'user': user})
+    
+    def post_detail(request, user_id):
+        return render(request, 'tweet/post_detail.html')
