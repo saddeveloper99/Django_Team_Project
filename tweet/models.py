@@ -13,3 +13,4 @@ class Post(models.Model):
     update_at = models.DateTimeField(auto_now=True)
     comment = models.TextField()
     like_count = models.PositiveIntegerField(default=0)
+{}
