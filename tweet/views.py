@@ -13,13 +13,14 @@ def home(request):
 
     return render(request, "tweet/home.html")
 
-#게시글 작성 ,login_required를 사용하는대신, 사용자를 로그인 페이지로 이동시킨다.
+#게시글 작성
+# @login_required
 def create_post(request):
-    #접근한 사용자가 로그인한 유저가 아니라면 로그인 페이지로 이동한다.
-    user = request.user.is_authenticated
-    if not user:
-        return redirect(reverse('sign-in'))
-    # GET : 글 작성 페이지 이동
+    # user = auth.get_user(request)
+    # if user:
+    #     return redirect('sign-in/')
+
+    #HTML 출력
     if request.method == 'GET':
         return render(request,'tweet/create_post.html')
 
@@ -28,39 +29,43 @@ def create_post(request):
         url = request.POST.get('url','')
         title = request.POST.get('title','')
         comment = request.POST.get('comment','')
-        owner = auth.get_user(request).user_id
+        owner = auth.get_user(request).id2
+        # owner = UserModel.objects.get(id=owner)
 
-        #접근한 유저가 UserModel에 등록된 사용자가 아닐경우 방지
-        try :
-            owner = UserModel.objects.get(user_id=owner)
-        except UserModel.DoesNotExist:
-            return redirect('/')
 
         # 데이터 검사
         if not all([url,title,comment]):
             return render(request, 'tweet/create_post.html',{'error':'빈칸 없이 입력해주세요.'})
 
-        # 게시글 저장,
-        new_post = Post.objects.create(owner=owner,url=url,title=title,comment=comment)
+        # 게시글 저장
+        # new_post = Post.objects.create(id=owner,url=url,title=title,comment=comment)
+
+        # # 나의 게시글 목록 가져오기, 정렬은 수정 순서가 아닌 생성시간 기준
+        # my_post = Post.objects.filter(id=owner).order_by('-create_at')
+        # context.update(my_post)
 
         # 게시글 저장후, 상세페이지로 이동
         return render(request,'tweet/create_post.html')
-        # return redirect(reverse('상세페이지'))
+        # return render(request,'상세페이지.html',{'context':context})
 
 # 게시글 수정
 def set_post(request,post_id):
+    test = Post.objects.all()
+    for i in test:
+        print(i.post_id)
+
+    print(post_id)
+
     #게시글이 없을 경우 방지
     try:
         post = Post.objects.get(post_id=post_id)
     except Post.DoesNotExist:
         return redirect('/')
+    # 지급 현재 작업영역 계십니다.
+    # 저장소에 최신 정보가 업데이트됬습니다.
 
-    #작성가 아닌 유저의 접근 방지
-    user = auth.get_user(request)
-    if post.owner.user_id !=  user.user_id:
-        return redirect('/')
 
-    # GET요청의경우, 이전에 작성해둔 post의 데이터와 함께 html을 출력한다.
+    context = {}
     if request.method == 'GET':
         return render(request, 'tweet/set_post.html', {'post':post})
 
@@ -71,8 +76,9 @@ def set_post(request,post_id):
         post.comment = request.POST.get('comment','')
         post.save()
 
-        return render(request, 'tweet/set_post.html', {'post':post})
-        # return redirect(reverse('상세페이지'))
+        post = Post.objects.filter(post_id=post_id)
+        return redirect('/')
+        # return render(request, '상세페이지.html', {'post': post})
 
 # 게시글 삭제
 # @login_required() 현재 유저와, owner의 id값을 비교하는 분기문이 있으므로 사용할 필요가 없으리라 기대한다.
@@ -118,5 +124,12 @@ def edit_profile(request):
         user = UserModel.objects.get(id=request.user.id)
         return render(request, {'user': user})
     
-def post_detail(request, user_id):
-    return render(request, 'tweet/post_detail.html')
+def post_detail(request, post_id):
+    if request.method == 'GET':
+        post = Post.objects.get(post_id=post_id)
+        print(post)
+        return render(request, 'tweet/post_detail.html') #post_id를 받아와서 게시글 클릭하면 상세페이지로
+    
+        #수정을 누르면 수정url로 이동
+        #삭제를 누르면 삭제url로 이동
+        #썸네일 이미지를 url로 출력
