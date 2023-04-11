@@ -29,7 +29,7 @@ def create_post(request):
         title = request.POST.get('title','')
         comment = request.POST.get('comment','')
         owner = auth.get_user(request).user_id
-
+## 해치우자 !
         #접근한 유저가 UserModel에 등록된 사용자가 아닐경우 방지
         try :
             owner = UserModel.objects.get(user_id=owner)
