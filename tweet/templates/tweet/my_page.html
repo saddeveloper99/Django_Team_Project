@@ -1,58 +1,63 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %}
 메인페이지
 {% endblock %}
 
 {% block content %}
 <style>
-    .icons {
+    /* .icons {
         object-fit: cover;
+        object-position: top;
         width: 64px;
         height: 64px;
-    }
-
-    .col-3 {
-        display: flex;
-        align-items: center;
-    }
-
-    .row {
-        padding-top: 5%;
-        padding-left: 5%;
-    }
-
-    .profile {
-        padding: 10%
-    }
+    } */
 
 </style>
-<div style="overflow: auto;">
-    <section class="profile">
+<div style="overflow: hidden;">
+    <section class="profile_section">
         <div class="profile_image">
-            <img style="float: left; border-radius: 100%; margin-right: 50px;" src="">
+            {% if user.is_authenticated and user.image %}
+            <img class="profile_image" src="{{ user.image }}">
+            {% elif user.is_authenticated and not user.image %}
+            <img class="profile_image" src={% static 'tweet/image/user_image.png' %}>
+            {% endif %}
         </div>
-        <h1 style="display:inline;" class="username">{{ click_user.username }}</h1>
+        <h1 style="display:inline;" class="username">{{ click_user.username }}
+            <button style="width: 20px; height: 20px;" onclick="location.href='{% url 'set-profile' user.pk %}'"></button>
+        <!-- <p type="button" src="static/tweet/image/edit_btn.svg"></p> -->
+        </h1>
         <hr>
         <span style="display:inline;" class="email_adresss">{{ click_user.email }}</span>
         <div class="created_at">{{ click_user.date_joined }}</div>
         <span>50 팔로우 중</span><span style="margin-left: 50px;">23 팔로워</span>
         <hr>
-        <div>{{ click_user.description }}</div>
+        <div style="margin-left: 200px;">{{ click_user.description }}</div>
         <!-- 필수기능 이후 여유있으면 개인 블로그 아이콘? -->
         <!-- <a href="https://velog.io/@rumor/DjangoA-4-%ED%8C%80-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-SA">
             <img class="icons" src="">
         </a> -->
     </section>
     <hr>
-    <div class="row" style="margin-top: 150px;">
+    <div class="row row-cols-1 row-cols-md-4 g-4">
         {% for post in posts %}
-        <div class="col-3">
-            <div class="card" style="width: 18rem;">
-                <img src="" class="card-img-top" alt="...">
+        <div class="col">
+            <div class="card h-100">
+                {# <img src={{ post.url }} class="card-img-top" alt="...">#}
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ post.youtube_url }}"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
                 <div class="card-body">
-                    <h5 class="card-title">{{ post.title }}</h5>
-                    <p class="card-text">{{ post.comment }}</p>
-                    <a href="{{ post.url }}" class="btn btn-primary">Go somewhere</a>
+                    <h5 class="card-title" style="font-size: 1.5rem">{{ post.title }}</h5>
+                    <p class="card-text" style="font-size: 1rem">{{ post.comment }}</p>
+                    <div class="like-wrap">
+                        <div style="">
+                            <p class="like">{{ post.like_count }}</p><img class="like-button" name="like_img"
+                                id={{post.post_id}} style="width: 32px" src="static/tweet/image/heart.svg">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

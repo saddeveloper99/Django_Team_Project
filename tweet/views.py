@@ -134,7 +134,6 @@ def my_page(request, user_id):
 
 
 def set_profile(request,user_id):
-    # 요청한 유저 id 와 프로필 페이지 유저 id가 다르면 자신의 프로필 수정으로 이동?
 
     # 메소드가 post일때, 유저네임, 프로필 사진, 프로필 메시지를 폼으로 받아온다.
     # 그리고 갱신하고 저장.
@@ -144,7 +143,6 @@ def set_profile(request,user_id):
         user = request.user
 
         user.username = request.POST.get('username', '')
-        user.image = request.POST.get('image', '')
         user.description = request.POST.get('description', '')
         user.save()
 
