@@ -17,8 +17,6 @@ def home(request):
         return redirect('/sign-in')
 
 # 게시글 작성 ,login_required를 사용하는대신, 사용자를 로그인 페이지로 이동시킨다.
-
-
 def create_post(request):
     # 접근한 사용자가 로그인한 유저가 아니라면 로그인 페이지로 이동한다.
     user = request.user.is_authenticated
@@ -35,27 +33,33 @@ def create_post(request):
         title = request.POST.get('title', '')
         comment = request.POST.get('comment', '')
         owner = auth.get_user(request).user_id
-        # 접근한 유저가 UserModel에 등록된 사용자가 아닐경우 방지
-        try:
+        youtube_url = request.POST.get('youtube_url', '')
+        #접근한 유저가 UserModel에 등록된 사용자가 아닐경우 방지
+        try :
             owner = UserModel.objects.get(user_id=owner)
         except UserModel.DoesNotExist:
             return redirect('/')
+
+        # youtube url 데이터 검사
+        if 'youtube.com' in youtube_url :
+            youtube_url_check = youtube_url.split('watch?v=')[1][:11]
+        elif 'youtu.be' in youtube_url :
+            youtube_url_check = youtube_url.split('be/')[1]
+        else :
+            return render(request, 'tweet/create_post.html', {'error': '유튜브 주소창을 입력해주세요.'})
 
         # 데이터 검사
         if not all([url, title, comment]):
             return render(request, 'tweet/create_post.html', {'error': '빈칸 없이 입력해주세요.'})
         # 게시글 저장,
-        new_post = Post.objects.create(
-            owner=owner, url=url, title=title, comment=comment)
+        new_post = Post.objects.create(owner=owner,url=url,title=title,comment=comment,youtube_url=youtube_url_check)
 
         # 게시글 저장후, 상세페이지로 이동
         return render(request, 'tweet/create_post.html')
         # return redirect(reverse('상세페이지'))
 
 # 게시글 수정
-
-
-def set_post(request, post_id):
+def set_post(request,post_id):
     # 탐색하는 게시글이 없을 경우 방지
     try:
         post = Post.objects.get(post_id=post_id)
