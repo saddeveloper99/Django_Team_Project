@@ -142,7 +142,7 @@ def set_profile(request,user_id):
     if request.method == "POST":
         user = UserModel.objects.get(pk=user_id)
         me = request.user
-        
+
         profile_image = request.FILES['profile-image']
         profile_image.name = 'user' + str(user.user_id) + '_' + str(random.randint(10000,100000)) + '.' + str(profile_image.name.split('.')[-1])
                     
@@ -153,7 +153,6 @@ def set_profile(request,user_id):
         # 저장한 파일 url 따기
         uploaded_file_url = file_system_storage.url(fs)
         
-        # 신규 회원의 user_id 따고 업데이트
         user.image = uploaded_file_url
         user.username = request.POST.get('username', '')
         user.description = request.POST.get('description', '')
