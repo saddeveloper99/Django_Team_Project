@@ -5,12 +5,14 @@ from django.contrib import auth
 from .models import Post
 from user.models import UserModel
 from django.urls import reverse
+from tweet.models import Post
 
 
 def home(request):
     user = request.user.is_authenticated
     if user:
-        return render(request, 'tweet/home.html')
+        all_post = Post.objects.all().order_by('-create_at')
+        return render(request, 'tweet/home.html', {'all_post': all_post})
     else:
         return redirect('/sign-in')
 
