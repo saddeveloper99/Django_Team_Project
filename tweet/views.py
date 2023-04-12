@@ -120,7 +120,6 @@ def edit_profile(request):
         user = UserModel.objects.get(id=id)
         if request.user.id == user:
 
-            # 폼데이터로 갱신
             user.save()
 
     elif request.method == "GET":
