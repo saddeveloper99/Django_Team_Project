@@ -17,6 +17,8 @@ def home(request):
         return redirect('/sign-in')
 
 # 게시글 작성 ,login_required를 사용하는대신, 사용자를 로그인 페이지로 이동시킨다.
+
+
 def create_post(request):
     # 접근한 사용자가 로그인한 유저가 아니라면 로그인 페이지로 이동한다.
     user = request.user.is_authenticated
@@ -33,8 +35,8 @@ def create_post(request):
         title = request.POST.get('title', '')
         comment = request.POST.get('comment', '')
         owner = auth.get_user(request).user_id
-        #접근한 유저가 UserModel에 등록된 사용자가 아닐경우 방지
-        try :
+        # 접근한 유저가 UserModel에 등록된 사용자가 아닐경우 방지
+        try:
             owner = UserModel.objects.get(user_id=owner)
         except UserModel.DoesNotExist:
             return redirect('/')
@@ -43,14 +45,17 @@ def create_post(request):
         if not all([url, title, comment]):
             return render(request, 'tweet/create_post.html', {'error': '빈칸 없이 입력해주세요.'})
         # 게시글 저장,
-        new_post = Post.objects.create(owner=owner,url=url,title=title,comment=comment)
+        new_post = Post.objects.create(
+            owner=owner, url=url, title=title, comment=comment)
 
         # 게시글 저장후, 상세페이지로 이동
         return render(request, 'tweet/create_post.html')
         # return redirect(reverse('상세페이지'))
 
 # 게시글 수정
-def set_post(request,post_id):
+
+
+def set_post(request, post_id):
     # 탐색하는 게시글이 없을 경우 방지
     try:
         post = Post.objects.get(post_id=post_id)
@@ -101,12 +106,12 @@ def delete_post(request, post_id):
 def my_page(request, user_id):
     # get일때, 유저 정보와 게시글들을 불러옴
     if request.method == "GET":
-        me = request.user
         # id로 선택한 유저의 정보를 가져옴
         click_user = UserModel.objects.get(user_id=user_id)
         # 유저 id가 post의 owner(fk)인 post를 가져와서
         # test = Post.objects.all()
         # print(test[0].title)
+        print(click_user)
         post = Post.objects.filter(owner=click_user).order_by('create_at')
         context = {
             'click_user': click_user,
@@ -115,31 +120,49 @@ def my_page(request, user_id):
         return render(request, 'tweet/my_page.html', context)
 
 
-def edit_profile(request):
+def set_profile(request, user_id):
+    # 요청한 유저 id 와 프로필 페이지 유저 id가 다르면 자신의 프로필 수정으로 이동?
+
+    # 메소드가 post일때, 유저네임, 프로필 사진, 프로필 메시지를 폼으로 받아온다.
+    # 그리고 갱신하고 저장.
     if request.method == "POST":
-        user = UserModel.objects.get(id=id)
-        if request.user.id == user:
+        # user = UserModel.objects.get(user_id=user_id)
+        # 여기 유저 검증 어떻게 해야하지?
+        user = request.user
 
-            user.save()
+        user.username = request.POST.get('username', '')
+        user.image = request.POST.get('image', '')
+        user.description = request.POST.get('description', '')
+        user.save()
 
+        post = Post.objects.filter(owner=user).order_by('create_at')
+        context = {
+            'click_user': user,
+            'posts': post,
+        }
+        return render(request, 'tweet/my_page.html', context)
+
+    # get일때는, 유저 정보를 id로 받아와서, 수정창에 입력 돼 있게 하기.
     elif request.method == "GET":
-        user = UserModel.objects.get(id=request.user.id)
-        return render(request, {'user': user})
+        user = UserModel.objects.get(user_id=request.user.user_id)
+        return render(request, 'tweet/set_profile.html', {'user': user})
+
 
 def post_detail(request, post_id):
     if request.method == 'GET':
         try:
             post = Post.objects.get(post_id=post_id)
         except Post.DoesNotExist:
-            return redirect('/')  #혹시 상세페이지 접속했을 때 게시글이 없다면 redirect
+            return redirect('/')  # 혹시 상세페이지 접속했을 때 게시글이 없다면 redirect
 
-        return render(request, 'tweet/post_detail.html',{'post':post}) #post_id를 받아와서 게시글 클릭하면 상세페이지로
-    
-        #수정을 누르면 수정url로 이동
-        #삭제를 누르면 삭제url로 이동
-        #썸네일 이미지를 url로 출력
-        
-        #form
+        # post_id를 받아와서 게시글 클릭하면 상세페이지로
+        return render(request, 'tweet/post_detail.html', {'post': post})
+
+        # 수정을 누르면 수정url로 이동
+        # 삭제를 누르면 삭제url로 이동
+        # 썸네일 이미지를 url로 출력
+
+        # form
         # <form method="POST" action= "{% url 'set-post' %}">
         # {% csrf_token %}
         # <button type="submit">수정</button>

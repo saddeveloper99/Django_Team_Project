@@ -5,10 +5,6 @@
 
 {% block content %}
 <style>
-    body {
-        overflow: auto;
-    }
-
     .icons {
         object-fit: cover;
         width: 64px;
@@ -28,19 +24,20 @@
     .profile {
         padding: 10%
     }
+
 </style>
 <div style="overflow: auto;">
     <section class="profile">
         <div class="profile_image">
             <img style="float: left; border-radius: 100%; margin-right: 50px;" src="">
         </div>
-        <h1 style="display:inline;" class="username">{{ user.username }}</h1>
+        <h1 style="display:inline;" class="username">{{ click_user.username }}</h1>
         <hr>
-        <span style="display:inline;" class="email_adresss">{{ user.email }}</span>
-        <div class="created_at">{{ user.date_joined }}</div>
+        <span style="display:inline;" class="email_adresss">{{ click_user.email }}</span>
+        <div class="created_at">{{ click_user.date_joined }}</div>
         <span>50 팔로우 중</span><span style="margin-left: 50px;">23 팔로워</span>
         <hr>
-        <div>프로필 메시지</div>
+        <div>{{ click_user.description }}</div>
         <!-- 필수기능 이후 여유있으면 개인 블로그 아이콘? -->
         <!-- <a href="https://velog.io/@rumor/DjangoA-4-%ED%8C%80-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-SA">
             <img class="icons" src="">
