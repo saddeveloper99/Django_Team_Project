@@ -15,7 +15,6 @@ def home(request):
         return redirect('/sign-in')
 
 # 게시글 작성 ,login_required를 사용하는대신, 사용자를 로그인 페이지로 이동시킨다.
-
 def create_post(request):
     # 접근한 사용자가 로그인한 유저가 아니라면 로그인 페이지로 이동한다.
     user = request.user.is_authenticated
@@ -50,18 +49,17 @@ def create_post(request):
 
 # 게시글 수정
 def set_post(request,post_id):
+    # 탐색하는 게시글이 없을 경우 방지
     try:
         post = Post.objects.get(post_id=post_id)
     except Post.DoesNotExist:
         return redirect('/')
-    # 지급 현재 작업영역 계십니다.
-    # 저장소에 최신 정보가 업데이트됬습니다.
-    # 작성가 아닌 유저의 접근 방지
+    # 작성자와,접근자 아이디가 불일치 할경우
     user = auth.get_user(request)
     if post.owner.user_id != user.user_id:
         return redirect('/')
 
-    context = {}
+    # GET일경우 기존 작성된 내용을 참고하여 데이터 출력
     if request.method == 'GET':
         return render(request, 'tweet/set_post.html', {'post': post})
 
@@ -72,13 +70,13 @@ def set_post(request,post_id):
         post.comment = request.POST.get('comment', '')
         post.save()
         post = Post.objects.filter(post_id=post_id)
-        return redirect('/')
+
+        # return redirect(reverse('상세페이지'))
         # return render(request, '상세페이지.html', {'post': post})
+
 
 # 게시글 삭제
 # @login_required() 현재 유저와, owner의 id값을 비교하는 분기문이 있으므로 사용할 필요가 없으리라 기대한다.
-
-
 def delete_post(request, post_id):
     if request.method == 'GET':
         return redirect('/')
