@@ -16,7 +16,9 @@
       margin-top: 100px;
     }
 
-    .thumbnail {
+    .youtube {
+      width: 500px;
+      height: 300px;
       margin-top: 30px;
       margin-bottom: 30px;
     }
@@ -51,9 +53,8 @@
     <div>
         <h1>{{post.title}}</h1>
     </div>
-    <div class="thumbnail">
-      {{post.url}}
-    </div>
+    <iframe src="https://www.youtube.com/embed/{{ post.youtube_url }}" class="youtube">
+    </iframe>
         <div class="content">{{post.comment}}</div>
     <div class="bottom">
       <div class="info">
@@ -64,10 +65,10 @@
       </div>
 
       <div class="toolbox">
-        <form action="{% url 'set-post' post_id=1 %}" method="GET">
+        <form action="{% url 'set-post' post.post_id %}" method="GET">
           <button type='submit' title="수정"> 수정</button>
         </form>
-        <form action="{% url 'delete-post' post_id=1 %}" method="POST">
+        <form action="{% url 'delete-post' post.post_id %}" method="POST">
           {% csrf_token %}
           <button type='submit' title="삭제" >삭제</button>
         </form>
