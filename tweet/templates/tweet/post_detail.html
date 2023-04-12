@@ -5,21 +5,75 @@
 
 {% block content %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+  <style>
+    .main {
+      margin-left: 200px;
+    }
+
+    .top {
+      margin-top: 100px;
+    }
+
+    .thumbnail {
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+
+    .content {
+      margin-bottom: 50px;
+    }
+
+    .bottom {
+      margin-left: 250px;
+    }
+
+    .info {
+      margin-left: 190px;
+    }
+
+    .toolbox {
+      margin-left: 310px;
+      display: flex;
+      flex-direction: row;
+    }
+  </style>
+
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>{{post.title}}</title>
 </head>
 <body>
-  <div style="margin-top: 100px;">{{post.url}}
-  {{post.title}}
-  {{post.comment}}
+  <div class="main">
+    <div class="top"></div>
+    <div>
+        <h1>{{post.title}}</h1>
+    </div>
+    <div class="thumbnail">
+      {{post.url}}
+    </div>
+        <div class="content">{{post.comment}}</div>
+    <div class="bottom">
+      <div class="info">
+              작성자 : {{post.owner.username}} <br/>
+              작성시간 : {{post.update_at}} <br/>
+              수정시간 : {{post.create_at}} <br/>
+              =========================<br/>
+      </div>
 
-  {{post.create_at}}
-  {{post.update_at}}
-  {{post.owner.username}}
+      <div class="toolbox">
+        <form action="{% url 'set-post' post_id=1 %}" method="GET">
+          <button type='submit' title="수정"> 수정</button>
+        </form>
+        <form action="{% url 'delete-post' post_id=1 %}" method="POST">
+          {% csrf_token %}
+          <button type='submit' title="삭제" >삭제</button>
+        </form>
+          <input type=button value="목록" onclick="location.href='http://127.0.0.1:8000/'">
+      </div>
+    </div>
   </div>
 </body>
 </html>
