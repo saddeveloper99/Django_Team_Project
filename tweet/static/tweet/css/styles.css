@@ -13,7 +13,7 @@ body {
 }
 
 p {
-    font-size: 2rem;
+    font-size: 1rem;
 }
 
 .cover {
@@ -104,3 +104,29 @@ p {
 }
 
 /* nav bar part end */
+
+.like {
+    float: right;
+    display: block;
+    margin: 0 5px 5px 0;
+    background-color: black;
+    border: 2px solid black;
+    border-radius: 70%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    color: white;
+}
+
+.like-button {
+    width: 28px;
+    float: right;
+    display: block;
+    margin: 0 5px 10px 0;
+}
+
+.like-button:hover {
+    filter: invert(16%) sepia(89%) saturate(6054%) hue-rotate(358deg) brightness(97%) contrast(113%);
+    transition: all 0.2s ease-in-out;
+    transform: scale(1.1);
+}
