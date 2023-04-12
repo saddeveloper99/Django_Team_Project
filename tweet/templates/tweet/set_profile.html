@@ -1,38 +1,20 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %}
 메인페이지
 {% endblock %}
 
 {% block content %}
-<style>
-    body {
-        overflow: auto;
-    }
 
-    .icons {
-        object-fit: cover;
-        width: 64px;
-        height: 64px;
-    }
-
-    .col-3 {
-        display: flex;
-        align-items: center;
-    }
-
-    .row {
-        padding-top: 5%;
-        padding-left: 5%;
-    }
-
-    .profile {
-        padding: 10%
-    }
-</style>
-<form class="profile" action="{% url 'set-profile' user.pk %}" method="post">
+<form class="profile_section" action="{% url 'set-profile' user.pk %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="profile_image">
-        <img style="float: left; border-radius: 100%; margin-right: 50px;" src="">
+        {% if user.is_authenticated and user.image %}
+        <img class="profile_image" src="{{ user.image }}">
+        {% elif user.is_authenticated and not user.image %}
+        <img class="profile_image" src={% static 'tweet/image/user_image.png' %}>
+        {% endif %}
     </div>
     <label for="username">유저 이름</label>
     <input type="text" value="{{ user.username }}" style="display:inline;" name="username" id="username"></input>
@@ -42,12 +24,18 @@
     <div class="created_at">{{ user.date_joined }}</div>
     <span>50 팔로우 중</span><span style="margin-left: 50px;">23 팔로워</span>
     <hr>
-    <label for="description">프로필 문구</label>
-    <input type="text" value="{{ user.description }}" name="description" id="description"></input>
+    <p for="description">프로필 문구</p>
+    <textarea type="text" value="{{ user.description }}" style="margin-left: 200px; width: 500px;" name="description" id="description"></textarea>
+    <hr>
+    <p for="profile-image" style="margin-left: 200px;">프로필 사진</p>
+    <div style="margin-left: 200px; width: 500px;" class="input-group mb-3">
+        <input type="file" class="form-control" id="profile-image" name="profile-image" accept="image/*">
+        <label class="input-group-text" for="profile-image">Upload</label>
+    </div>
     <hr>
     <div style="float:right">
         <button type="submit" class="btn btn-primary">수정</button>
-        <button class="btn btn-primary">취소</button>
+        <button type="button" onclick="location.href='{% url 'my-page' user.pk %}'" class="btn btn-primary">취소</button>
     </div>
     <!-- 필수기능 이후 여유있으면 개인 블로그 아이콘? -->
     <!-- <a href="https://velog.io/@rumor/DjangoA-4-%ED%8C%80-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-SA">
