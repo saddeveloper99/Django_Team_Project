@@ -1,5 +1,5 @@
 venv
-migrations/
+migrations
 # Created by https://www.toptal.com/developers/gitignore/api/django,windows,linux,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=django,windows,linux,python
 

@@ -6,42 +6,22 @@
 {% block content %}
 <div class="container-md timeline-container">
 <div class="row row-cols-1 row-cols-md-4 g-4">
+  {% for post in all_post %}
   <div class="col">
     <div class="card h-100">
-      <img src="..." class="card-img-top" alt="...">
+      <img src={{ post.url }} class="card-img-top" alt="...">
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        <h5 class="card-title" style="font-size: 1.5rem">{{ post.title }}</h5>
+        <p class="card-text" style="font-size: 1rem">{{ post.comment }}</p>
+        <div class="like-wrap">
+          <div style="">
+          <p class="like">{{ post.like_count }}</p><img class="like-button" name="like_img" id={{post.post_id}} style="width: 32px" src="static/tweet/image/heart.svg">
+          </div>
+      </div>
       </div>
     </div>
   </div>
-  <div class="col">
-    <div class="card h-100">
-      <img src="..." class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">This is a short card.</p>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card h-100">
-      <img src="..." class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card h-100">
-      <img src="..." class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-      </div>
-    </div>
-  </div>
+  {% endfor %}
 </div>
 </div>
 {% endblock %}
