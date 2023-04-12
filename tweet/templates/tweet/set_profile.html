@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}
+메인페이지
+{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        overflow: auto;
+    }
+
+    .icons {
+        object-fit: cover;
+        width: 64px;
+        height: 64px;
+    }
+
+    .col-3 {
+        display: flex;
+        align-items: center;
+    }
+
+    .row {
+        padding-top: 5%;
+        padding-left: 5%;
+    }
+
+    .profile {
+        padding: 10%
+    }
+</style>
+<form class="profile" action="{% url 'set-profile' user.pk %}" method="post">
+    {% csrf_token %}
+    <div class="profile_image">
+        <img style="float: left; border-radius: 100%; margin-right: 50px;" src="">
+    </div>
+    <label for="username">유저 이름</label>
+    <input type="text" value="{{ user.username }}" style="display:inline;" name="username" id="username"></input>
+    <hr>
+    <!-- <label for="email_adresss">Email</label>
+    <input style="display:inline;" value="{{ user.email }}" name="email" id="email_adresss"></input> -->
+    <div class="created_at">{{ user.date_joined }}</div>
+    <span>50 팔로우 중</span><span style="margin-left: 50px;">23 팔로워</span>
+    <hr>
+    <label for="description">프로필 문구</label>
+    <input type="text" value="{{ user.description }}" name="description" id="description"></input>
+    <hr>
+    <div style="float:right">
+        <button type="submit" class="btn btn-primary">수정</button>
+        <button class="btn btn-primary">취소</button>
+    </div>
+    <!-- 필수기능 이후 여유있으면 개인 블로그 아이콘? -->
+    <!-- <a href="https://velog.io/@rumor/DjangoA-4-%ED%8C%80-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-SA">
+        <img class="icons" src="">
+    </a> -->
+</form>
+{% endblock %}
+
+<!-- 프로필 수정을 누르면? -->
