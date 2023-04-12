@@ -53,10 +53,9 @@ def create_post(request):
             return render(request, 'tweet/create_post.html', {'error': '빈칸 없이 입력해주세요.'})
         # 게시글 저장,
         new_post = Post.objects.create(owner=owner,url=url,title=title,comment=comment,youtube_url=youtube_url_check)
-
+        post_id = new_post.post_id
         # 게시글 저장후, 상세페이지로 이동
-        return render(request, 'tweet/create_post.html')
-        # return redirect(reverse('상세페이지'))
+        return redirect(reverse('post-detail',args=[post_id]))
 
 # 게시글 수정
 def set_post(request,post_id):
@@ -72,6 +71,7 @@ def set_post(request,post_id):
 
     # GET일경우 기존 작성된 내용을 참고하여 데이터 출력
     if request.method == 'GET':
+        print(post.youtube_url)
         return render(request, 'tweet/set_post.html', {'post': post})
 
     # POST의경우 전달된 데이터를 토대로 게시글 수정
@@ -79,15 +79,13 @@ def set_post(request,post_id):
         post.url = request.POST.get('url', '')
         post.title = request.POST.get('title', '')
         post.comment = request.POST.get('comment', '')
+        post.youtube_url = request.POST.get('youtube_url','')
         post.save()
-        post = Post.objects.filter(post_id=post_id)
-
-        # return redirect(reverse('상세페이지'))
-        # return render(request, '상세페이지.html', {'post': post})
+        # 수정된 상세 페이지로 이동
+        return redirect(reverse('post-detail',args=[post_id]))
 
 
 # 게시글 삭제
-# @login_required() 현재 유저와, owner의 id값을 비교하는 분기문이 있으므로 사용할 필요가 없으리라 기대한다.
 def delete_post(request, post_id):
     if request.method == 'GET':
         return redirect('/')
@@ -103,8 +101,8 @@ def delete_post(request, post_id):
         if user.user_id != post.owner.user_id:
             post.delete()
 
-        return redirect('/')
-        # return redirect(reverse('상세페이지'))
+        # 삭제후 마이페이지로 이동
+        return redirect(reverse('set-profile',args=[post.owner.user_id]))
 
 
 def my_page(request, user_id):

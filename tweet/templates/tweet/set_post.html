@@ -4,33 +4,36 @@
 {% endblock %}
 
 {% block set-post %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>게시글 수정 페이지</title>
-</head>
-<body>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>게시글 수정 페이지</title>
+    </head>
+    <body>
 
-<form method="post" action="{% url 'set-post' post.post_id %}" style="margin-top: 100px">
-    {% csrf_token %}
-    <input type="hidden" name = "post_id" value="{{ post.id }}">
-    <label for="input_url">썸네일:</label><br>
-    <textarea name="url" cols="150" rows="2"  >{{ post.url }}</textarea>
-    <br>
-    <label for="input_title">제목:</label><br>
-    <textarea name="title" cols="150" rows="2" >{{ post.title }}</textarea>
-    <br>
-    <label for="comment">내용:</label><br>
-    <textarea name="comment" cols="150" rows="5">{{ post.comment }}</textarea>
-    <br>
-    <button type="submit">등록</button>
-    {% if error %}
-        <div>
-            {{ error }}
-        </div>
-    {% endif %}
-</form>
-</body>
-</html>
+    <form method="post" action="{% url 'set-post' post.post_id %}" style="margin-top: 100px">
+        {% csrf_token %}
+        <input type="hidden" name="post_id" value="{{ post.id }}">
+        <label for="input_url">썸네일:</label><br>
+        <textarea name="url" cols="150" rows="2">{{ post.url }}</textarea>
+        <br>
+        <label for="input_title">제목:</label><br>
+        <textarea name="title" cols="150" rows="2">{{ post.title }}</textarea>
+        <br>
+        <label for="comment">내용:</label><br>
+        <textarea name="comment" cols="150" rows="5">{{ post.comment }}</textarea>
+        <br>
+        <label for="comment">유튜브 주소:</label><br>
+        <textarea name="youtube_url" cols="150" rows="2">{{ post.youtube_url }}</textarea>
+        <br>
+        <button type="submit">등록</button>
+        {% if error %}
+            <div>
+                {{ error }}
+            </div>
+        {% endif %}
+    </form>
+    </body>
+    </html>
 {% endblock %}
