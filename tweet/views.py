@@ -6,13 +6,24 @@ from .models import Post
 from user.models import UserModel
 from django.urls import reverse
 from tweet.models import Post
+from django.core.paginator import Paginator
 
 
 def home(request):
     user = request.user.is_authenticated
     if user:
         all_post = Post.objects.all().order_by('-create_at')
-        return render(request, 'tweet/home.html', {'all_post': all_post})
+        page = request.GET.get('page')
+        paginator = Paginator(all_post, 8)
+        page_obj = paginator.get_page(page)
+        
+        try:
+            page_obj = paginator.page(page)
+        except:
+            page = 1
+            page_obj = paginator.page(page)
+        
+        return render(request, 'tweet/home.html', {'all_post': all_post, 'page_obj' : page_obj})
     else:
         return redirect('/sign-in')
 

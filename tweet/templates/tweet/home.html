@@ -6,7 +6,7 @@
 {% block content %}
 <div class="container-md timeline-container">
 <div class="row row-cols-1 row-cols-md-4 g-4">
-  {% for post in all_post %}
+  {% for post in page_obj %}
   <div class="col">
     <div class="card h-100">
       <img src={{ post.url }} class="card-img-top" alt="...">
@@ -23,5 +23,31 @@
   </div>
   {% endfor %}
 </div>
+<div style="margin: 0 auto; display: flex;">
+  <nav aria-label="Page navigation example" style="margin: 0 auto;">
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{page_obj.previous_page_number}}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      {% endif %}
+
+      {% for p in page_obj.paginator.page_range %}
+      <li class="page-item"><a class="page-link" href="?page={{p}}">{{p}}</a></li>
+      {% endfor %}
+      {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{page_obj.next_page_number}}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+  </nav>
 </div>
+
+
 {% endblock %}
