@@ -105,6 +105,14 @@ p {
 
 /* nav bar part end */
 
+.like-wrap {
+    float: right;
+    display: flex;
+    margin: 16px 0 0 5px;
+    text-align: center;
+    line-height: 27px;
+}
+
 .like {
     float: right;
     display: block;
@@ -122,7 +130,7 @@ p {
     width: 28px;
     float: right;
     display: block;
-    margin: 0 5px 10px 0;
+    margin: 0 5px 0px 0;
 }
 
 .like-button:hover {
@@ -150,3 +158,17 @@ p {
     width: 64px;
     height: 64px;
 } */
+.post-author {
+    float: left;
+    display: flex;
+    margin: 6px 0 0 0;
+    text-align: center;
+    line-height: 50px;
+}
+
+.main-text {
+    color: black;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
