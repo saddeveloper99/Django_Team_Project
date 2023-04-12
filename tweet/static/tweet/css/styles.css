@@ -139,6 +139,25 @@ p {
     transform: scale(1.1);
 }
 
+.profile_section {
+    padding-top: 11%;
+}
+.profile_image{
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    object-position: center;
+    float: left; 
+    border-radius: 50%; 
+    margin-right: 50px;
+}
+
+/* .icons {
+    object-fit: cover;
+    object-position: top;
+    width: 64px;
+    height: 64px;
+} */
 .post-author {
     float: left;
     display: flex;
