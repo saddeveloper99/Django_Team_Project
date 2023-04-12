@@ -4,7 +4,7 @@ from user.models import UserModel
 
 # Create your models here.
 
-class Post_Comment_Model(models.Model):
+class PostCommentModel(models.Model):
     class Meta:
         db_table = 'comment'
 

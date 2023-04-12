@@ -5,6 +5,44 @@
     <title>Title</title>
 </head>
 <body>
-hello comment html!
+hello comment html!<br>
+
+{{ post.post_id }} <br>
+{{ post.title }} <br>
+{{ post.comment }} <br>
+{{ post.url }} <br>
+{{ post.create_at }} <br>
+{{ post.update_at }} <br>
+
+<br>
+
+{% for index in post_comments %}
+    {{ index.owner.username }}
+    {{ index.post_comment }}
+    {{ index.com_updated_at }}
+    <div style="display: flex;">
+        <form>
+            <button>수정</button>
+        </form>
+        <form method="post" action="{% url 'delete-comment' index.post_comment_id %} %}">
+            <button type="submit">삭제</button>
+        </form>
+    </div>
+
+{% endfor %}
+
+<br>
+
+{% if user.is_authenticated %}
+
+    <form method="post" action="{% url 'create-comment' post.post_id %}">
+        {% csrf_token %}
+        <label for="post-comment">{{ user.username }}</label>
+        <input type="text" name="post-comment" placeholder="악플은 싫어잉ㅇㅇㅇㅇㅇㅇㅇㅇㅇ" required>
+        <button type="submit">작성</button>
+    </form>
+{% endif %}
+
+
 </body>
 </html>
