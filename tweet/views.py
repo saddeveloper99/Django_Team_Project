@@ -5,17 +5,18 @@ from django.contrib import auth
 from .models import Post
 from user.models import UserModel
 from django.urls import reverse
+from tweet.models import Post
 
 
 def home(request):
     user = request.user.is_authenticated
     if user:
-        return render(request, 'tweet/home.html')
+        all_post = Post.objects.all().order_by('-create_at')
+        return render(request, 'tweet/home.html', {'all_post': all_post})
     else:
         return redirect('/sign-in')
 
 # 게시글 작성 ,login_required를 사용하는대신, 사용자를 로그인 페이지로 이동시킨다.
-
 def create_post(request):
     # 접근한 사용자가 로그인한 유저가 아니라면 로그인 페이지로 이동한다.
     user = request.user.is_authenticated
@@ -32,17 +33,26 @@ def create_post(request):
         title = request.POST.get('title', '')
         comment = request.POST.get('comment', '')
         owner = auth.get_user(request).user_id
+        youtube_url = request.POST.get('youtube_url', '')
         #접근한 유저가 UserModel에 등록된 사용자가 아닐경우 방지
         try :
             owner = UserModel.objects.get(user_id=owner)
         except UserModel.DoesNotExist:
             return redirect('/')
 
+        # youtube url 데이터 검사
+        if 'youtube.com' in youtube_url :
+            youtube_url_check = youtube_url.split('watch?v=')[1][:11]
+        elif 'youtu.be' in youtube_url :
+            youtube_url_check = youtube_url.split('be/')[1]
+        else :
+            return render(request, 'tweet/create_post.html', {'error': '유튜브 주소창을 입력해주세요.'})
+
         # 데이터 검사
         if not all([url, title, comment]):
             return render(request, 'tweet/create_post.html', {'error': '빈칸 없이 입력해주세요.'})
         # 게시글 저장,
-        new_post = Post.objects.create(owner=owner,url=url,title=title,comment=comment)
+        new_post = Post.objects.create(owner=owner,url=url,title=title,comment=comment,youtube_url=youtube_url_check)
 
         # 게시글 저장후, 상세페이지로 이동
         return render(request, 'tweet/create_post.html')
@@ -50,18 +60,17 @@ def create_post(request):
 
 # 게시글 수정
 def set_post(request,post_id):
+    # 탐색하는 게시글이 없을 경우 방지
     try:
         post = Post.objects.get(post_id=post_id)
     except Post.DoesNotExist:
         return redirect('/')
-    # 지급 현재 작업영역 계십니다.
-    # 저장소에 최신 정보가 업데이트됬습니다.
-    # 작성가 아닌 유저의 접근 방지
+    # 작성자와,접근자 아이디가 불일치 할경우
     user = auth.get_user(request)
     if post.owner.user_id != user.user_id:
         return redirect('/')
 
-    context = {}
+    # GET일경우 기존 작성된 내용을 참고하여 데이터 출력
     if request.method == 'GET':
         return render(request, 'tweet/set_post.html', {'post': post})
 
@@ -72,13 +81,13 @@ def set_post(request,post_id):
         post.comment = request.POST.get('comment', '')
         post.save()
         post = Post.objects.filter(post_id=post_id)
-        return redirect('/')
+
+        # return redirect(reverse('상세페이지'))
         # return render(request, '상세페이지.html', {'post': post})
+
 
 # 게시글 삭제
 # @login_required() 현재 유저와, owner의 id값을 비교하는 분기문이 있으므로 사용할 필요가 없으리라 기대한다.
-
-
 def delete_post(request, post_id):
     if request.method == 'GET':
         return redirect('/')
