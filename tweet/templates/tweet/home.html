@@ -66,10 +66,11 @@
   </div>
   </nav>
 </div>
-
+{% if user.is_authenticated %}
 <div class="ad-1">
   <img src={% static 'tweet/image/ad-1.png' %} width="80%">
 </div>
+{% endif %}
 
 
 {% endblock %}
