@@ -1,44 +1,32 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}
-    메인페이지
+{{ post.title }}
 {% endblock %}
 
 {% block content %}
-    <!DOCTYPE html>
-    <html>
-    <head>
         <style>
             .main {
-                margin-left: 200px;
+                display: block;
+                margin: 100px auto;
+                width: 55%;
+                border: 1px solid #cccccc;
+                padding: 10px 10px 10px 10px;
+                border-radius: 8px;
             }
 
             .top {
-                margin-top: 100px;
-            }
-
-            .youtube {
-                width: 500px;
-                height: 300px;
-                margin-top: 30px;
-                margin-bottom: 30px;
+                margin-top: 10px;
             }
 
             .content {
                 margin-bottom: 50px;
             }
 
-            .bottom {
-                margin-left: 250px;
-            }
-
-            .info {
-                margin-left: 190px;
-            }
-
             .toolbox {
-                margin-left: 310px;
                 display: flex;
-                flex-direction: row;
+                flex-direction: row-reverse;
+                
             }
         </style>
 
@@ -59,12 +47,6 @@
                 document.write(star);
             }
         </script>
-
-
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{ post.title }}</title>
     </head>
     <body>
     <div class="main">
@@ -72,10 +54,11 @@
         <div>
             <h1>{{ post.title }}</h1>
         </div>
-        <iframe src="https://www.youtube.com/embed/{{ post.youtube_url }}" class="youtube">
-        </iframe>
+        <div style="margin: 0 auto; width: 40%; height: 100%" align="center">
+        <iframe width='100%' height='100%'  src="https://www.youtube.com/embed/{{ post.youtube_url }}?autoplay=1&mute=0&autohide='2'&modestbranding=1&enablejsapi=1&version=3&playerapiid=ytplayer" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
         <div class="content">{{ post.comment }}</div>
-        <div class="bottom">
+        <div class="bottom" align="right">
             <div class="info">
                 작성자 : {{ post.owner.username }} <br/>
                 평균 별점 :  <script>print_star({{ post.avg_star }})</script> <br>
@@ -88,45 +71,60 @@
 
                 {% if  request.user.user_id == post.owner.user_id %}
                     <form action="{% url 'set-post' post.post_id %}" method="GET">
-                        <button type='submit' title="수정"> 수정</button>
+                        <button type='submit' title="수정" class="btn btn-primary btn-sm"> 수정</button>
                     </form>
+                    &nbsp
                     <form action="{% url 'delete-post' post.post_id %}" method="POST">
                         {% csrf_token %}
-                        <button type='submit' title="삭제">삭제</button>
+                        <button type='submit' title="삭제" class="btn btn-primary btn-sm">삭제</button>
                     </form>
+                    &nbsp
                 {% endif %}
 
-                <input type=button value="목록" onclick="location.href='http://127.0.0.1:8000/'">
+                <input type=button value="목록" class="btn btn-primary btn-sm" onclick="location.href='/'">
             </div>
         </div>
-    </div>
-
-
-
-
-    {% for index in post_comments %}
-        {{ index.owner.username }}
-        {{ index.post_comment }}
+        {% if post_comments %}
+        <hr style="height: 3px; border: 0; background: gray;">
+        {% endif %}
+        {% for index in post_comments %}
+        <a href={% url 'my-page' index.owner.pk %} role="button" style="color: black; text-decoration-line: none;">
+            <div class="box" style="background: #BDBDBD; float:left; margin: 0 4px 10px; width: 30px; height: 30px;">
+                {% if index.owner.image %}
+                  <img class="profile" src={{ index.owner.image }}>
+                {% else %}
+                  <img class="profile" src={% static 'tweet/image/user_image.png' %}>
+                {% endif %}
+                
+            </div>
+                {{ index.owner.username }}
+            </a>
         {{ index.com_updated_at }}
         <br>
-        <span><script>print_star({{ index.comment_star }});</script></span>
+        <br>
+        {{ index.post_comment }}
+        <br>
+        <span style="font-size: 0.8rem"><script>print_star({{ index.comment_star }});</script></span>
+        <br>
+            
         {% if  request.user.user_id == index.owner.user_id %}
             <div style="display: flex;">
                 <form method="post" action="{% url 'delete-comment' index.post_comment_id %}">
                     {% csrf_token %}
-                    <button type="submit">삭제</button>
+                    <button type="submit" class="btn btn-primary btn-sm">삭제</button>
                 </form>
-                <button onclick="show_my_comment_set({{ forloop.counter }})">수정</button>
+                &nbsp
+                <button onclick="show_my_comment_set({{ forloop.counter }})" class="btn btn-primary btn-sm" >수정</button>
             </div>
         {% endif %}
+        <hr>
         <div id="comment_set{{ forloop.counter }}"
              style="display: none; margin-top: 30px; margin-bottom: 30px; background-color: rgba(174,240,255,0.98); width: 1110px">
             <form method="post" action="{% url 'set-comment' index.post_comment_id %}">
                 {% csrf_token %}
                 <div>
                     <label for="post-comment"> 작성자 : {{ index.owner.username }}</label> <br>
-                    <textarea name="post-comment" placeholder=" 수정할 댓글 : {{ index.post_comment }}" rows="2" cols="150"
-                              required></textarea>
+                    <textarea name="post-comment" placeholder=" 수정할 댓글 : {{ index.post_comment }}" rows="2" required></textarea>
                 </div>
                 <div style="display: inline-block; margin-left: 920px">
                     <select name="comment_star">
@@ -148,14 +146,14 @@
 
     {% if user.is_authenticated %}
 
-        <div>
+        <div style="margin: 0 auto;">
             <form method="post" action="{% url 'create-comment' post.post_id %}">
                 {% csrf_token %}
                 <div>
                     <label for="post-comment"> 작성자 : {{ user.username }}</label> <br>
-                    <textarea name="post-comment" placeholder="댓글을 작성해주세요." rows="2" cols="150" required></textarea>
+                    <textarea name="post-comment" placeholder="댓글을 작성해주세요." rows="2" style="width:100%" required></textarea>
                 </div>
-                <div style="display: inline-block; margin-left: 920px">
+                <div style="display: inline-block;">
                     <select name="comment_star">
                         <option>⭐⭐⭐⭐⭐</option>
                         <option>⭐⭐⭐⭐</option>
@@ -170,12 +168,5 @@
 
 
     {% endif %}
-
-
-    </body>
-    </html>
-
-
-
-
+    </div>
 {% endblock %}

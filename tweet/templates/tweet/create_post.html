@@ -4,24 +4,16 @@
 {% endblock %}
 
 {% block content %}
-
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>게시글 작성 페이지</title>
-    </head>
-    <body>
-    <form method="post" action="/create-post/" style="margin-top: 100px">
+    <form method="post" action="/create-post/" style="width: 65%; margin: 10% auto; border: 2px solid #cccccc; padding: 20px 20px 20px 20px">
         {% csrf_token %}
         <label for="input_title">제목:</label><br>
-        <textarea name="title" cols="150" rows="2" placeholder="게시글 제목을 입력해주세요."></textarea>
+        <textarea name="title" style="width: 100%" placeholder="게시글 제목을 입력해주세요."></textarea>
         <br>
         <label for="comment">내용:</label><br>
-        <textarea name="comment" cols="150" rows="5" placeholder="게시글 내용을 입력해주세요."></textarea>
+        <textarea name="comment" style="width: 100%;" placeholder="게시글 내용을 입력해주세요."></textarea>
         <br>
         <label for="comment">유튜브 주소:</label><br>
-        <textarea name="youtube_url" cols="150" rows="2" placeholder="https://www.youtube.com/watch?v=?????"></textarea>
+        <textarea name="youtube_url" style="width: 100%" placeholder="https://www.youtube.com/watch?v=?????"></textarea>
         <br>
         <button type="submit">등록</button>
         {% if error %}
@@ -30,6 +22,4 @@
             </div>
         {% endif %}
     </form>
-    </body>
-    </html>
 {% endblock %}
