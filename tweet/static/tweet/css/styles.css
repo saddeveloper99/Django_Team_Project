@@ -16,11 +16,6 @@ p {
     font-size: 1rem;
 }
 
-.cover {
-    height: 70vh;
-}
-
-
 .timeline-container {
     margin-top: 100px;
 }
@@ -76,10 +71,9 @@ p {
 .menu {
     display: flex;
     position: absolute;
-    right: 30px;
-    width: 10%;
+    right: 10px;
     height: 100%;
-    margin: 15px 20px;
+    margin: 15px 30px;
 }
 
 .box {
@@ -98,9 +92,8 @@ p {
 
 .main-content {
     display: block;
-    margin: 200px auto;
+    margin: 0 auto;
     width: 70%;
-    height: 70%;
 }
 
 /* nav bar part end */
@@ -142,13 +135,14 @@ p {
 .profile_section {
     padding-top: 11%;
 }
-.profile_image{
+
+.profile_image {
     width: 150px;
     height: 150px;
     object-fit: cover;
     object-position: center;
-    float: left; 
-    border-radius: 50%; 
+    float: left;
+    border-radius: 50%;
     margin-right: 50px;
 }
 
@@ -170,5 +164,9 @@ p {
     color: black;
     text-overflow: ellipsis;
     white-space: nowrap;
-    overflow: hidden;
+}
+
+.sign-text {
+    color: white;
+    text-decoration-line: none;
 }

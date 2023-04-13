@@ -12,22 +12,18 @@ import random
 
 
 def home(request):
-    user = request.user.is_authenticated
-    if user:
-        all_post = Post.objects.all().order_by('-create_at')
-        page = request.GET.get('page')
-        paginator = Paginator(all_post, 8)
-        page_obj = paginator.get_page(page)
-        
-        try:
-            page_obj = paginator.page(page)
-        except:
-            page = 1
-            page_obj = paginator.page(page)
-        
-        return render(request, 'tweet/home.html', {'all_post': all_post, 'page_obj' : page_obj})
-    else:
-        return redirect('/sign-in')
+    all_post = Post.objects.all().order_by('-create_at')
+    page = request.GET.get('page')
+    paginator = Paginator(all_post, 8)
+    page_obj = paginator.get_page(page)
+    
+    try:
+        page_obj = paginator.page(page)
+    except:
+        page = 1
+        page_obj = paginator.page(page)
+    
+    return render(request, 'tweet/home.html', {'all_post': all_post, 'page_obj' : page_obj})
 
 # 게시글 작성 ,login_required를 사용하는대신, 사용자를 로그인 페이지로 이동시킨다.
 def create_post(request):
