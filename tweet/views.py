@@ -168,8 +168,10 @@ def set_profile(request,user_id):
         
         if get_user_model().objects.filter(username=new_username).exists() and new_username != user.username: 
             return render(request, 'tweet/set_profile.html', {'user': user, 'error':'이미 존재하는 사용자명입니다.'})
-        elif new_username == '':
+        elif new_username == '' :
             return render(request, 'tweet/set_profile.html', {'user': user, 'error':'수정할 이름을 입력해주세요.'})
+        elif new_username.strip() == '':
+            return render(request, 'tweet/set_profile.html', {'user': user, 'error':'닉네임은 공백만으로 지을 수 없습니다.'})
         else:
             user.username = new_username
             user.description = request.POST.get('description', '')

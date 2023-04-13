@@ -21,7 +21,6 @@
                     <label for="password2">비밀번호 확인</label>
                     <input type="password" class="form-control" id="password2" name="password2">
                 </div>
-                <div>{{ error }}</div>
                 <div style="float: right; margin-top: 10px;">
                 <label for="image">프로필 사진</label>
                 <div class="input-group mb-3">
@@ -35,7 +34,7 @@
                 <p style="font-size: 1.2rem;">🎈프로필 사진을 업로드하지 않으면 기본 사진으로 설정됩니다.</p>
                 {% if error %}
                     <div class="alert alert-danger" role="alert">
-                        {{ err.msg }}
+                        {{ error }}
                     </div>
                 {% endif %}
                 <div style="float: right">
