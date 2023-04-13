@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-    메인페이지
+    게시글 수정
 {% endblock %}
 
 {% block set-post %}
@@ -12,17 +12,18 @@
     </head>
     <body>
 
-    <form method="post" action="{% url 'set-post' post.post_id %}" style="margin-top: 100px">
+    <form method="post" action="{% url 'set-post' post.post_id %}" style="width: 65%; margin: 10% auto; border: 2px solid #cccccc; padding: 20px 20px 20px 20px">
         {% csrf_token %}
+        <h2> 게시글 수정 </h2>
         <input type="hidden" name="post_id" value="{{ post.id }}">
         <label for="input_title">제목:</label><br>
-        <textarea name="title" cols="150" rows="2">{{ post.title }}</textarea>
+        <textarea name="title" style="width: 100%">{{ post.title }}</textarea>
         <br>
         <label for="comment">내용:</label><br>
-        <textarea name="comment" cols="150" rows="5">{{ post.comment }}</textarea>
+        <textarea name="comment" style="width: 100%">{{ post.comment }}</textarea>
         <br>
         <label for="comment">유튜브 주소:</label><br>
-        <textarea name="youtube_url" cols="150" rows="2">{{ post.youtube_url }}</textarea>
+        <textarea name="youtube_url" style="width: 100%">{{ post.youtube_url }}</textarea>
         <br>
         <button type="submit">등록</button>
         {% if error %}

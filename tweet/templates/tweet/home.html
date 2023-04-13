@@ -13,29 +13,29 @@
       <a href={% url 'post-detail' post.pk %} style="text-decoration-line: none;">
       <img src={{ post.youtube_thumbnail }} width=100% height=100% class="card-img-top" alt="...">
       <div class="card-body">
+        <div class="like-wrap">
+          <div style="">
+            <p class="like">{{ post.avg_star }}</p>⭐
+          </div>
+        </div>
         <h5 class="card-title main-text" style="font-size: 1.5rem;">{{ post.title }}</h5>
         <p class="card-text main-text" style="font-size: 1rem;">{{ post.comment }}</p>
         </a>
         <div>
-        <div class="post-author">
-          <a href={% url 'my-page' post.owner.pk %} role="button" style="color: black; text-decoration-line: none;">
-            <div class="box" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
-                {% if post.owner.image %}
-                  <img class="profile" src={{ post.owner.image }}>
-                {% else %}
-                  <img class="profile" src={% static 'tweet/image/user_image.png' %}>
-                {% endif %}
-                
-            </div>
-                {{ post.owner }}
-            </a>
-        </div>
-        <div class="like-wrap">
-          <div style="">
-          <p class="like">{{ post.like_count }}</p><img class="like-button" name="like_img" id={{post.post_id}} style="width: 32px" src="static/tweet/image/heart.svg">
+          <div class="post-author">
+            <a href={% url 'my-page' post.owner.pk %} role="button" style="color: black; text-decoration-line: none;">
+              <div class="box" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
+                  {% if post.owner.image %}
+                    <img class="profile" src={{ post.owner.image }}>
+                  {% else %}
+                    <img class="profile" src={% static 'tweet/image/user_image.png' %}>
+                  {% endif %}
+                  
+              </div>
+                  {{ post.owner }}
+              </a>
           </div>
-      </div>
-    </div>
+        </div>
       </div>
     </div>
   </div>
@@ -65,6 +65,10 @@
     </ul>
   </div>
   </nav>
+</div>
+
+<div class="ad-1">
+  <img src={% static 'tweet/image/ad-1.png' %} width="80%">
 </div>
 
 
