@@ -16,6 +16,7 @@ class PostCommentModel(models.Model):
     post_comment = models.TextField()
     com_created_at = models.DateTimeField(auto_now_add=True)
     com_updated_at = models.DateTimeField(auto_now=True)
+    comment_star = models.PositiveIntegerField()
 
     # like_history는 추후 적용을 강구해 본다.
     # like_count = models.PositiveIntegerField()
