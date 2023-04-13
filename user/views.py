@@ -21,13 +21,10 @@ def sign_up_view(request):
         password = request.POST.get('password', None)
         password2 = request.POST.get('password2', None)
         
-        
-        
         try:
             profile_image = request.FILES['profile-image']
         except:
             profile_image = None
-        
 
         res_data = {}
         if password != password2:
