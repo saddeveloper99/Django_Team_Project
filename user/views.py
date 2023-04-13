@@ -27,7 +27,7 @@ def sign_up_view(request):
 
         res_data = {}
         if password != password2:
-            res_data['error2'] = '비밀번호가 다릅니다. 다시 입력바랍니다.'
+            res_data['error'] = '비밀번호가 다릅니다. 다시 입력바랍니다.'
             return render(request, 'user/signup.html', res_data)
         else:
             exist_user = get_user_model().objects.filter(username=username)

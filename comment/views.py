@@ -22,7 +22,6 @@ def set_post_star_avg(post_id):
         avg = 0
     post.avg_star = avg
     post.save()
-    print(post.avg_star)
 
 def comment_view(request,post_id):
     try:

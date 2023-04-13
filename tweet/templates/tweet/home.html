@@ -1,76 +1,85 @@
 {% extends '../base.html' %}
 {% load static %}
 {% block title %}
-  메인페이지
+    메인페이지
 {% endblock %}
 
 {% block content %}
-<div class="container-md timeline-container">
-<div class="row row-cols-1 row-cols-md-4 g-4">
-  {% for post in page_obj %}
-  <div class="col">
-    <div class="card h-100">
-      <a href={% url 'post-detail' post.pk %} style="text-decoration-line: none;">
-      <img src={{ post.youtube_thumbnail }} width=100% height=100% class="card-img-top" alt="...">
-      <div class="card-body">
-        <div class="like-wrap">
-          <div style="">
-            <p class="like">{{ post.avg_star }}</p>⭐
-          </div>
-        </div>
-        <h5 class="card-title main-text" style="font-size: 1.5rem;">{{ post.title }}</h5>
-        <p class="card-text main-text" style="font-size: 1rem;">{{ post.comment }}</p>
-        </a>
-        <div>
-          <div class="post-author">
-            <a href={% url 'my-page' post.owner.pk %} role="button" style="color: black; text-decoration-line: none;">
-              <div class="box" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
-                  {% if post.owner.image %}
-                    <img class="profile" src={{ post.owner.image }}>
-                  {% else %}
-                    <img class="profile" src={% static 'tweet/image/user_image.png' %}>
-                  {% endif %}
-                  
-              </div>
-                  {{ post.owner }}
-              </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
-</div>
-<div style="margin: 0 auto; display: flex;">
-  <nav aria-label="Page navigation example" style="margin: 0 auto;">
-    <ul class="pagination">
-      {% if page_obj.has_previous %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{page_obj.previous_page_number}}" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-      {% endif %}
+    <div class="container-md timeline-container">
+        <div style="margin-left: 700px; margin-bottom: 30px">
+            <form method="post" action="">
+                {% csrf_token %}
+                <input type="text" name="search-home" placeholder="검색하기..." required>
+                <button type="submit" style="background-color: black; font-size: 16px; color: white; border-radius: 5px; cursor: pointer;">search</button>
 
-      {% for p in page_obj.paginator.page_range %}
-      <li class="page-item"><a class="page-link" href="?page={{p}}">{{p}}</a></li>
-      {% endfor %}
-      {% if page_obj.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{page_obj.next_page_number}}" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-      {% endif %}
-    </ul>
-  </div>
-  </nav>
-</div>
-{% if user.is_authenticated %}
-<div class="ad-1">
-  <img src={% static 'tweet/image/ad-1.png' %} width="80%">
-</div>
-{% endif %}
+            </form>
+        </div>
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for post in page_obj %}
+                <div class="col">
+                    <div class="card h-100">
+                        <a href={% url 'post-detail' post.pk %} style="text-decoration-line: none;">
+                        <img src={{ post.youtube_thumbnail }} width=100% height=100% class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <div class="like-wrap">
+                                <div style="">
+                                    <p class="like">{{ post.avg_star }}</p>⭐
+                                </div>
+                            </div>
+                            <h5 class="card-title main-text" style="font-size: 1.5rem;">{{ post.title }}</h5>
+                            <p class="card-text main-text" style="font-size: 1rem;">{{ post.comment }}</p>
+                            </a>
+                            <div>
+                                <div class="post-author">
+                                    <a href={% url 'my-page' post.owner.pk %} role="button"
+                                       style="color: black; text-decoration-line: none;">
+                                        <div class="box" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
+                                            {% if post.owner.image %}
+                                                <img class="profile" src={{ post.owner.image }}>
+                                            {% else %}
+                                                <img class="profile" src={% static 'tweet/image/user_image.png' %}>
+                                            {% endif %}
+
+                                        </div>
+                                        {{ post.owner }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div style="margin: 0 auto; display: flex;">
+            <nav aria-label="Page navigation example" style="margin: 0 auto;">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% for p in page_obj.paginator.page_range %}
+                        <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+        </div>
+        </nav>
+    </div>
+    {% if user.is_authenticated %}
+        <div class="ad-1">
+            <img src={% static 'tweet/image/ad-1.png' %} width="80%">
+        </div>
+    {% endif %}
 
 
 {% endblock %}
