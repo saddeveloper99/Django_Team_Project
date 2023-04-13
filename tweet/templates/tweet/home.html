@@ -1,4 +1,5 @@
 {% extends '../base.html' %}
+{% load static %}
 {% block title %}
   메인페이지
 {% endblock %}
@@ -9,17 +10,22 @@
   {% for post in page_obj %}
   <div class="col">
     <div class="card h-100">
-{#      <img src={{ post.url }} class="card-img-top" alt="...">#}
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ post.youtube_url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      <a href={% url 'post-detail' post.pk %} style="text-decoration-line: none;">
+      <img src={{ post.youtube_thumbnail }} width=100% height=100% class="card-img-top" alt="...">
       <div class="card-body">
-        <a href={% url 'post-detail' post.pk %} style="text-decoration-line: none;">
         <h5 class="card-title main-text" style="font-size: 1.5rem;">{{ post.title }}</h5>
         <p class="card-text main-text" style="font-size: 1rem;">{{ post.comment }}</p>
         </a>
+        <div>
         <div class="post-author">
           <a href={% url 'my-page' post.owner.pk %} role="button" style="color: black; text-decoration-line: none;">
             <div class="box" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
-                <img class="profile" src={{ post.owner.image }}>
+                {% if post.owner.image %}
+                  <img class="profile" src={{ post.owner.image }}>
+                {% else %}
+                  <img class="profile" src={% static 'tweet/image/user_image.png' %}>
+                {% endif %}
+                
             </div>
                 {{ post.owner }}
             </a>
@@ -29,6 +35,7 @@
           <p class="like">{{ post.like_count }}</p><img class="like-button" name="like_img" id={{post.post_id}} style="width: 32px" src="static/tweet/image/heart.svg">
           </div>
       </div>
+    </div>
       </div>
     </div>
   </div>

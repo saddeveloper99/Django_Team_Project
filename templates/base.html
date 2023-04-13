@@ -66,9 +66,18 @@
                         </ul>
                     </li>
                 </div>
+            {% else %}
+                <div class="menu">
+                    <div>
+                        <p style="line-height: 45px; color: white;">
+                            <a href={% url 'sign-in' %} class="sign-text">로그인하기</a> / <a href={% url 'sign-up' %} class="sign-text">회원가입 </a>
+                        </p>
+                    </div>
+                </div>
             {% endif %}
         </div>
-        <div style="display: block; width:70%; margin: 0 auto;">
+    </div>
+    <div class="main-content">
         {% block content %}
             <!-- content -->
         {% endblock %}
@@ -78,7 +87,6 @@
         {% block set-post %}
             {#    게시글 수정 블록    #}
         {% endblock %}
-        </div>
     </div>
 </div>
 </body>

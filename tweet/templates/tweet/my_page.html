@@ -18,15 +18,16 @@
 <div style="overflow: hidden;">
     <section class="profile_section">
         <div class="profile_image">
-            {% if user.is_authenticated and user.image %}
-            <img class="profile_image" src="{{ user.image }}">
-            {% elif user.is_authenticated and not user.image %}
+            {% if user.is_authenticated and click_user.image %}
+            <img class="profile_image" src="{{ click_user.image }}">
+            {% elif user.is_authenticated and not click_user.image %}
             <img class="profile_image" src={% static 'tweet/image/user_image.png' %}>
             {% endif %}
         </div>
         <h1 style="display:inline;" class="username">{{ click_user.username }}
-            <button style="width: 20px; height: 20px;" onclick="location.href='{% url 'set-profile' user.pk %}'"></button>
-        <!-- <p type="button" src="static/tweet/image/edit_btn.svg"></p> -->
+            {% if click_user == me %}
+            <img type="button" src="/static/tweet/image/edit_btn.svg" style="width: 30px; height: 30px;" onclick="location.href='{% url 'set-profile' user.pk %}'"></img>
+            {% endif %}
         </h1>
         <hr>
         <span style="display:inline;" class="email_adresss">{{ click_user.email }}</span>
@@ -55,7 +56,7 @@
                     <div class="like-wrap">
                         <div style="">
                             <p class="like">{{ post.like_count }}</p><img class="like-button" name="like_img"
-                                id={{post.post_id}} style="width: 32px" src="static/tweet/image/heart.svg">
+                                id={{post.post_id}} style="width: 32px" src="/static/tweet/image/heart.svg">
                         </div>
                     </div>
                 </div>

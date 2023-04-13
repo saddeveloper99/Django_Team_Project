@@ -13,4 +13,5 @@ class Post(models.Model):
     comment = models.TextField()
     like_count = models.PositiveIntegerField(default=0)
     youtube_url = models.CharField(max_length=20)
+    youtube_thumbnail = models.CharField(max_length=100)
     avg_star = models.PositiveIntegerField(default=1)

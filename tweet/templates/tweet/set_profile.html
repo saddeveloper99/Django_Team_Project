@@ -25,7 +25,8 @@
     <span>50 팔로우 중</span><span style="margin-left: 50px;">23 팔로워</span>
     <hr>
     <p for="description">프로필 문구</p>
-    <textarea type="text" value="{{ user.description }}" style="margin-left: 200px; width: 500px;" name="description" id="description"></textarea>
+    <textarea type="text" style="margin-left: 200px; width: 500px;" name="description"
+        id="description">{{ user.description }}</textarea>
     <hr>
     <p for="profile-image" style="margin-left: 200px;">프로필 사진</p>
     <div style="margin-left: 200px; width: 500px;" class="input-group mb-3">
@@ -33,6 +34,11 @@
         <label class="input-group-text" for="profile-image">Upload</label>
     </div>
     <hr>
+    {% if error %}
+    <div style="margin-left: 200px; color: red;">
+        {{ error }}
+    </div>
+    {% endif %}
     <div style="float:right">
         <button type="submit" class="btn btn-primary">수정</button>
         <button type="button" onclick="location.href='{% url 'my-page' user.pk %}'" class="btn btn-primary">취소</button>
