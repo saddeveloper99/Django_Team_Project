@@ -199,6 +199,7 @@ def post_detail(request, post_id):
             return redirect('/')
 
         post_comments = PostCommentModel.objects.filter(post_id=post_id)
+        print(post_comments)
         context = {'post':post,'post_comments':post_comments}
 
         return render(request, 'tweet/post_detail.html',context) #post_id를 받아와서 게시글 클릭하면 상세페이지로

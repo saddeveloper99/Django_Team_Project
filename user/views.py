@@ -20,7 +20,6 @@ def sign_up_view(request):
         username = request.POST.get('username', None)
         password = request.POST.get('password', None)
         password2 = request.POST.get('password2', None)
-
         try:
             profile_image = request.FILES['profile-image']
         except:
@@ -28,13 +27,16 @@ def sign_up_view(request):
 
         res_data = {}
         if password != password2:
-            res_data['error'] = '비밀번호가 다릅니다. 다시 입력바랍니다.'
+            res_data['error2'] = '비밀번호가 다릅니다. 다시 입력바랍니다.'
             return render(request, 'user/signup.html', res_data)
         else:
             exist_user = get_user_model().objects.filter(username=username)
             if exist_user:
+                res_data['error'] = '이미 존재하는 아이디입니다.'
+                return render(request, 'user/signup.html', res_data)  # 사용자가 존재하기 때문에 사용자를 저장하지 않고 회원가입 페이지를 다시 띄움
+            elif not all([username, password, password2]):
+                res_data['error'] = '빈칸 없이 입력바랍니다.'
                 # 사용자가 존재하기 때문에 사용자를 저장하지 않고 회원가입 페이지를 다시 띄움
-                res_data['error'] = '이미 존재하는 아이디입니다'
                 return render(request, 'user/signup.html', res_data)
             elif username == '' or username.strip() == '':
                 res_data['error'] = '아이디는 공백만으로 지을 수 없습니다.'
@@ -60,7 +62,6 @@ def sign_up_view(request):
                     check.update(image=uploaded_file_url)
 
                 return redirect('/sign-in')  # 회원가입이 완료되었으므로 로그인 페이지로 이동
-
 
 def sign_in_view(request):
     if request.method == 'POST':
