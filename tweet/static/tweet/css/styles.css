@@ -105,6 +105,14 @@ p {
 
 /* nav bar part end */
 
+.like-wrap {
+    float: right;
+    display: flex;
+    margin: 16px 0 0 5px;
+    text-align: center;
+    line-height: 27px;
+}
+
 .like {
     float: right;
     display: block;
@@ -122,11 +130,45 @@ p {
     width: 28px;
     float: right;
     display: block;
-    margin: 0 5px 10px 0;
+    margin: 0 5px 0px 0;
 }
 
 .like-button:hover {
     filter: invert(16%) sepia(89%) saturate(6054%) hue-rotate(358deg) brightness(97%) contrast(113%);
     transition: all 0.2s ease-in-out;
     transform: scale(1.1);
+}
+
+.profile_section {
+    padding-top: 11%;
+}
+.profile_image{
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    object-position: center;
+    float: left; 
+    border-radius: 50%; 
+    margin-right: 50px;
+}
+
+/* .icons {
+    object-fit: cover;
+    object-position: top;
+    width: 64px;
+    height: 64px;
+} */
+.post-author {
+    float: left;
+    display: flex;
+    margin: 6px 0 0 0;
+    text-align: center;
+    line-height: 50px;
+}
+
+.main-text {
+    color: black;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }

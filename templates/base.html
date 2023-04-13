@@ -44,7 +44,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu" style="padding: 5px;">
                             <li><a class="dropdown-item" href={% url 'create-post' %}>글쓰기</a></li>
-                            <li><a class="dropdown-item" href=>프로필 보기 {{ user.user_id }}</a></li>
+                            <li><a class="dropdown-item" href={% url 'my-page' user.pk %}>프로필 보기</a></li>
                             <li><a class="dropdown-item" href={% url 'logout' %}>로그아웃</a></li>
                         </ul>
                     </li>
@@ -61,7 +61,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu" style="padding: 5px;">
                             <li><a class="dropdown-item" href="/create-post/">글쓰기</a></li>
-                            <li><a class="dropdown-item" href="#">프로필 수정</a></li>
+                            <li><a class="dropdown-item" href="{% url 'my-page' user.pk %}">프로필 보기</a></li>
                             <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
                         </ul>
                     </li>

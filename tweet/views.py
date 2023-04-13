@@ -7,6 +7,8 @@ from user.models import UserModel
 from django.urls import reverse
 from tweet.models import Post
 from django.core.paginator import Paginator
+from django.core.files.storage import FileSystemStorage
+import random
 
 
 def home(request):
@@ -134,17 +136,25 @@ def my_page(request, user_id):
 
 
 def set_profile(request,user_id):
-    # 요청한 유저 id 와 프로필 페이지 유저 id가 다르면 자신의 프로필 수정으로 이동?
 
     # 메소드가 post일때, 유저네임, 프로필 사진, 프로필 메시지를 폼으로 받아온다.
     # 그리고 갱신하고 저장.
     if request.method == "POST":
-        # user = UserModel.objects.get(user_id=user_id)
-        # 여기 유저 검증 어떻게 해야하지?
-        user = request.user
+        user = UserModel.objects.get(pk=user_id)
+        me = request.user
 
+        profile_image = request.FILES['profile-image']
+        profile_image.name = 'user' + str(user.user_id) + '_' + str(random.randint(10000,100000)) + '.' + str(profile_image.name.split('.')[-1])
+                    
+        # 파일 저장
+        file_system_storage = FileSystemStorage()
+        fs = file_system_storage.save(profile_image.name, profile_image)
+        
+        # 저장한 파일 url 따기
+        uploaded_file_url = file_system_storage.url(fs)
+        
+        user.image = uploaded_file_url
         user.username = request.POST.get('username', '')
-        user.image = request.POST.get('image', '')
         user.description = request.POST.get('description', '')
         user.save()
 
