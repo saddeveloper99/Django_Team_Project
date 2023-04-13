@@ -106,21 +106,21 @@
             </div>
                 {{ index.owner.username }}
             </a>
-        {{ index.com_updated_at }}
-        <br>
-        <br>
-        {{ index.post_comment }}
-        <br>
-        <span style="font-size: 0.8rem"><script>print_star({{ index.comment_star }});</script></span>
-        <br>
-            
-        {% if  request.user.user_id == index.owner.user_id %}
-            <div style="display: flex;">
-                <form method="post" action="{% url 'delete-comment' index.post_comment_id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary btn-sm">삭제</button>
-                </form>
-                &nbsp
+            {{ index.com_updated_at|timesince  }}전
+            <br>
+            <br>
+            {{ index.post_comment }}
+            <br>
+            <span style="font-size: 0.8rem"><script>print_star({{ index.comment_star }});</script></span>
+            <br>
+
+            {% if  request.user.user_id == index.owner.user_id %}
+                <div style="display: flex;">
+                    <form method="post" action="{% url 'delete-comment' index.post_comment_id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary btn-sm">삭제</button>
+                    </form>
+                    &nbsp
                     <button onclick="show_my_comment_set({{ forloop.counter }})" class="btn btn-primary btn-sm">수정
                     </button>
             </div>
