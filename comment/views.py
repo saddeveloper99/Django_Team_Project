@@ -4,9 +4,26 @@ from .models import PostCommentModel
 from user.models import UserModel
 from tweet.models import Post
 from django.urls import reverse
-from django.db.models import Sum, Value
-from django.db.models.functions import Coalesce
 from tweet import urls
+
+#평균 별점 구하기
+def set_post_star_avg(post_id):
+    post = Post.objects.get(post_id=post_id)
+    comments = PostCommentModel.objects.filter(post=post)
+    total_user = 0
+    total_star = 0
+    for i in comments:
+        total_star += i.comment_star
+        total_user +=1
+    try :
+        avg = round(total_star/total_user)
+    except ZeroDivisionError:
+        # 남아 있는 댓글이 하나도 없이, 모두 삭제됬을때
+        avg = 0
+    post.avg_star = avg
+    post.save()
+    print(post.avg_star)
+
 def comment_view(request,post_id):
     try:
         post = Post.objects.get(post_id=post_id)
@@ -32,6 +49,9 @@ def comment_view(request,post_id):
         post_comment = request.POST.get('post-comment')
         comment_star = request.POST.get('comment_star')
         new_post_commnet = PostCommentModel.objects.create(post=post,owner=owner,post_comment=post_comment,comment_star=len(comment_star))
+        post_comment = PostCommentModel.objects.filter(post=post)
+        # 평균 별점 수정
+        set_post_star_avg(post_id)
 
         return redirect(reverse('post-detail',args=[post_id]))
 
@@ -55,7 +75,11 @@ def delete_comment(request,post_comment_id):
         else:
             post_id = comment.post.post_id
             comment.delete()
-            # 댓글 삭제후 다시 상세 게시판으로 이동
+
+            #평균 별점 수정
+            set_post_star_avg(post_id)
+
+
             return redirect(reverse('post-detail',args=[post_id]))
 
 
@@ -82,6 +106,10 @@ def set_comment(request,post_comment_id):
         comment.post_comment = request.POST.get('post-comment','')
         comment.comment_star = len(star)
         comment.save()
+
+        # 평균 별점 수정
+        set_post_star_avg(comment.post.post_id)
+
         return redirect(reverse('post-detail',args=[comment.post.post_id]))
 
 
