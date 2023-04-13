@@ -99,9 +99,7 @@ p {
 /* nav bar part end */
 
 .like-wrap {
-    float: right;
     display: flex;
-    margin: 16px 0 0 5px;
     text-align: center;
     line-height: 27px;
 }
@@ -109,14 +107,13 @@ p {
 .like {
     float: right;
     display: block;
-    margin: 0 5px 5px 0;
-    background-color: black;
-    border: 2px solid black;
-    border-radius: 70%;
-    width: 30px;
-    height: 30px;
+    margin: 6px 5px 5px 0;
+    width: 27px;
+    height: 20px;
     text-align: center;
-    color: white;
+    color: black;
+    line-height: 18px;
+    font-size: 1rem;
 }
 
 .like-button {
@@ -170,4 +167,11 @@ p {
 .sign-text {
     color: white;
     text-decoration-line: none;
+}
+
+.ad-1 {
+    display: block;
+    position: absolute;
+    top: 300px;
+    left: 50px;
 }

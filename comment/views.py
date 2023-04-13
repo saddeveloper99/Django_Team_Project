@@ -16,7 +16,7 @@ def set_post_star_avg(post_id):
         total_star += i.comment_star
         total_user +=1
     try :
-        avg = round(total_star/total_user)
+        avg = round(total_star/total_user, 1)
     except ZeroDivisionError:
         # 남아 있는 댓글이 하나도 없이, 모두 삭제됬을때
         avg = 0

@@ -1,63 +1,63 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}
-    {{ post.title }}
+{{ post.title }}
 {% endblock %}
 
 {% block content %}
-    <style>
-        .main {
-            display: block;
-            margin: 100px auto;
-            width: 55%;
-            border: 1px solid #cccccc;
-            padding: 10px 10px 10px 10px;
-            border-radius: 8px;
-        }
+        <style>
+            .main {
+                display: block;
+                margin: 100px auto;
+                width: 55%;
+                border: 1px solid #cccccc;
+                padding: 10px 10px 10px 10px;
+                border-radius: 8px;
+            }
 
-        .top {
-            margin-top: 10px;
-        }
+            .top {
+                margin-top: 10px;
+            }
 
-        .content {
-            margin-bottom: 50px;
-        }
+            .content {
+                margin-bottom: 50px;
+            }
 
-        .toolbox {
-            display: flex;
-            flex-direction: row-reverse;
+            .toolbox {
+                display: flex;
+                flex-direction: row-reverse;
+                
+            }
+        </style>
 
-        }
-    </style>
-
-    <script>
+        <script>
         function show_my_comment_set(index) {
             var x = document.getElementById("comment_set" + index);
-            x.style.display = (x.style.display === "none") ? "block" : "none";
-            {#  자바스크립트의 삼항 연산자, === :값과 데이터가 동일한지 확인   #}
-            {#   block : 속성을 표기 , none : 속성을 표기하지 않음     #}
-        }
+                x.style.display = (x.style.display === "none") ? "block" : "none";
+                {#  자바스크립트의 삼항 연산자, === :값과 데이터가 동일한지 확인   #}
+                {#   block : 속성을 표기 , none : 속성을 표기하지 않음     #}
+            }
 
-        function print_star(num) {
-            star = "⭐".repeat(num)
-            {#star += "☆".repeat(5 - num)#}
-            {# repeat 메소드는 다음과 같다. #}
-            {# python :  star = "*" * 3  #}
-            star = (num > 0) ? star : "아직 기록된 평점이 없습니다.";
-            document.write(star);
-        }
-    </script>
+            function print_star(num) {
+                star = "⭐".repeat(Math.round(num))
+                {#star += "☆".repeat(5 - Math.round(num))#}
+                {# repeat 메소드는 다음과 같다. #}
+                {# python :  star = "*" * 3  #}
+            star = (Math.round(num) > 0) ? star : "아직 기록된 평점이 없습니다.";
+                document.write(star);
+            }
+        </script>
     </head>
     <body>
     <div class="main">
         <div class="top"></div>
-        <div style="margin: 0 auto; width: 40%; height: 100%" align="center">
-            <iframe width='100%' height='100%'
-                    src="https://www.youtube.com/embed/{{ post.youtube_url }}"
-                    title="YouTube video player" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen></iframe>
-        </div>
+            <div style="margin: 0 auto; width: 60%; height: 20rem; text-align: center;">
+                <iframe width=100% height=100%
+                        src="https://www.youtube.com/embed/{{ post.youtube_url }}"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" style="display: inline-block;"
+                        allowfullscreen></iframe>
+            </div>
         <div>
             <h1>{{ post.title }}</h1>
         </div>
@@ -91,19 +91,19 @@
             </div>
         </div>
         {% if post_comments %}
-            <hr style="height: 3px; border: 0; background: gray;">
+        <hr style="height: 3px; border: 0; background: gray;">
         {% endif %}
         {% for index in post_comments %}
-            <a href={% url 'my-page' index.owner.pk %} role="button" style="color: black; text-decoration-line: none;">
+        <a href={% url 'my-page' index.owner.pk %} role="button" style="color: black; text-decoration-line: none;">
                 <div class="box"
                      style="background: #BDBDBD; float:left; margin: 0 4px 10px; width: 30px; height: 30px;">
-                    {% if index.owner.image %}
-                        <img class="profile" src={{ index.owner.image }}>
-                    {% else %}
-                        <img class="profile" src={% static 'tweet/image/user_image.png' %}>
-                    {% endif %}
-
-                </div>
+                {% if index.owner.image %}
+                  <img class="profile" src={{ index.owner.image }}>
+                {% else %}
+                  <img class="profile" src={% static 'tweet/image/user_image.png' %}>
+                {% endif %}
+                
+            </div>
                 {{ index.owner.username }}
             </a>
             {{ index.com_updated_at|timesince  }}전
@@ -123,60 +123,60 @@
                     &nbsp
                     <button onclick="show_my_comment_set({{ forloop.counter }})" class="btn btn-primary btn-sm">수정
                     </button>
-                </div>
-            {% endif %}
-            <hr>
-            <div id="comment_set{{ forloop.counter }}"
-                 style="display: none; width: 700px">
-                <form method="post" action="{% url 'set-comment' index.post_comment_id %}">
-                    {% csrf_token %}
-                    <div>
-                        <label for="post-comment"> 작성자 : {{ index.owner.username }}</label> <br>
-                        <textarea name="post-comment" placeholder=" 수정할 댓글 : {{ index.post_comment }}"  cols="95" rows="2"
-                                  required></textarea>
-                    </div>
-                    <div style="display: inline-block;">
-                        <select name="comment_star">
-                            <option>⭐⭐⭐⭐⭐</option>
-                            <option>⭐⭐⭐⭐</option>
-                            <option>⭐⭐⭐</option>
-                            <option>⭐⭐</option>
-                            <option>⭐</option>
-                        </select>
-                    </div>
-                    <button type="submit">댓글 수정</button>
-                </form>
             </div>
-
-        {% endfor %}
-
-
-        <br>
-
-        {% if user.is_authenticated %}
-
-            <div style="margin: 0 auto;">
-                <form method="post" action="{% url 'create-comment' post.post_id %}">
-                    {% csrf_token %}
-                    <div>
-                        <label for="post-comment"> 작성자 : {{ user.username }}</label> <br>
-                        <textarea name="post-comment" placeholder="댓글을 작성해주세요." rows="2" style="width:100%"
-                                  required></textarea>
-                    </div>
-                    <div style="display: inline-block;">
-                        <select name="comment_star">
-                            <option>⭐⭐⭐⭐⭐</option>
-                            <option>⭐⭐⭐⭐</option>
-                            <option>⭐⭐⭐</option>
-                            <option>⭐⭐</option>
-                            <option>⭐</option>
-                        </select>
-                    </div>
-                    <button type="submit">댓글 작성</button>
-                </form>
-            </div>
-
-
         {% endif %}
+        <hr>
+            <div id="comment_set{{ forloop.counter }}"
+                 style="display: none; margin-top: 30px; margin-bottom: 30px;">
+            <form method="post" action="{% url 'set-comment' index.post_comment_id %}">
+                {% csrf_token %}
+                <div style="width: 100%">
+                    <label for="post-comment"> 작성자 : {{ index.owner.username }}</label> <br>
+                        <textarea name="post-comment" placeholder=" 수정할 댓글 : {{ index.post_comment }}" style="width: 70%"
+                                  required></textarea>
+                </div>
+                <div style="display: inline-block;">
+                    <select name="comment_star">
+                        <option>⭐⭐⭐⭐⭐</option>
+                        <option>⭐⭐⭐⭐</option>
+                        <option>⭐⭐⭐</option>
+                        <option>⭐⭐</option>
+                        <option>⭐</option>
+                    </select>
+                </div>
+                <button type="submit">댓글 수정</button>
+            </form>
+        </div>
+
+    {% endfor %}
+
+
+    <br>
+
+    {% if user.is_authenticated %}
+
+        <div style="margin: 0 auto;">
+            <form method="post" action="{% url 'create-comment' post.post_id %}">
+                {% csrf_token %}
+                <div>
+                    <label for="post-comment"> 작성자 : {{ user.username }}</label> <br>
+                        <textarea name="post-comment" placeholder="댓글을 작성해주세요." rows="2" style="width:70%"
+                                  required></textarea>
+                </div>
+                <div style="display: inline-block;">
+                    <select name="comment_star">
+                        <option>⭐⭐⭐⭐⭐</option>
+                        <option>⭐⭐⭐⭐</option>
+                        <option>⭐⭐⭐</option>
+                        <option>⭐⭐</option>
+                        <option>⭐</option>
+                    </select>
+                </div>
+                <button type="submit">댓글 작성</button>
+            </form>
+        </div>
+
+
+    {% endif %}
     </div>
 {% endblock %}
