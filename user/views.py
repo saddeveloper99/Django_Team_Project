@@ -31,12 +31,16 @@ def sign_up_view(request):
 
         res_data = {}
         if password != password2:
-            res_data['error'] = '비밀번호가 다릅니다. 다시 입력바랍니다.'
+            res_data['error2'] = '비밀번호가 다릅니다. 다시 입력바랍니다.'
             return render(request, 'user/signup.html', res_data)
         else:
             exist_user = get_user_model().objects.filter(username=username)
             if exist_user:
-                return render(request, 'user/signup.html')  # 사용자가 존재하기 때문에 사용자를 저장하지 않고 회원가입 페이지를 다시 띄움
+                res_data['error1'] = '이미 존재하는 아이디입니다.'
+                return render(request, 'user/signup.html', res_data)  # 사용자가 존재하기 때문에 사용자를 저장하지 않고 회원가입 페이지를 다시 띄움
+            elif not all([username, password, password2]):
+                res_data['error3'] = '빈칸 없이 입력바랍니다.'
+                return render(request, 'user/signup.html', res_data)
             else:
                 new_user = UserModel.objects.create_user(username=username, password=password)
                 if profile_image:
@@ -47,16 +51,14 @@ def sign_up_view(request):
                     file_system_storage = FileSystemStorage()
                     fs = file_system_storage.save(profile_image.name, profile_image)
                     
-                    # 저장한 파일 url 따기
+                    # 저장한 파일 url
                     uploaded_file_url = file_system_storage.url(fs)
                     
                     # 신규 회원의 user_id 따고 업데이트
                     check = UserModel.objects.filter(user_id = new_user.user_id)
                     check.update(image=uploaded_file_url)
-                    
 
                 return redirect('/sign-in')  # 회원가입이 완료되었으므로 로그인 페이지로 이동
-
 
 def sign_in_view(request):
     if request.method == 'POST':
