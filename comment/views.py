@@ -5,6 +5,7 @@ from user.models import UserModel
 from tweet.models import Post
 from django.urls import reverse
 from django.db.models import Sum, Value
+from django.db.models.functions import Coalesce
 from tweet import urls
 def comment_view(request,post_id):
     try:
