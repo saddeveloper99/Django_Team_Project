@@ -12,24 +12,26 @@ from django.core.paginator import Paginator
 from django.core.files.storage import FileSystemStorage
 import random
 
+# Youtube api
+from ytmusicapi import YTMusic
+ytmusic = YTMusic()
+
+
+
 
 def home(request):
-    user = request.user.is_authenticated
-    if user:
-        all_post = Post.objects.all().order_by('-create_at')
-        page = request.GET.get('page')
-        paginator = Paginator(all_post, 8)
-        page_obj = paginator.get_page(page)
-        
-        try:
-            page_obj = paginator.page(page)
-        except:
-            page = 1
-            page_obj = paginator.page(page)
-        
-        return render(request, 'tweet/home.html', {'all_post': all_post, 'page_obj' : page_obj})
-    else:
-        return redirect('/sign-in')
+    all_post = Post.objects.all().order_by('-create_at')
+    page = request.GET.get('page')
+    paginator = Paginator(all_post, 8)
+    page_obj = paginator.get_page(page)
+    
+    try:
+        page_obj = paginator.page(page)
+    except:
+        page = 1
+        page_obj = paginator.page(page)
+    
+    return render(request, 'tweet/home.html', {'all_post': all_post, 'page_obj' : page_obj})
 
 # 게시글 작성 ,login_required를 사용하는대신, 사용자를 로그인 페이지로 이동시킨다.
 def create_post(request):
@@ -61,12 +63,16 @@ def create_post(request):
             youtube_url_check = youtube_url.split('be/')[1]
         else :
             return render(request, 'tweet/create_post.html', {'error': '유튜브 주소창을 입력해주세요.'})
+        
+        # youtube 썸네일 주소 저장
+        youtube_thumbnail = ytmusic.get_song(youtube_url_check)['videoDetails']['thumbnail']['thumbnails'][0]['url']
+        
 
         # 데이터 검사
         if not all([title, comment]):
             return render(request, 'tweet/create_post.html', {'error': '빈칸 없이 입력해주세요.'})
         # 게시글 저장,
-        new_post = Post.objects.create(owner=owner,title=title,comment=comment,youtube_url=youtube_url_check)
+        new_post = Post.objects.create(owner=owner,title=title,comment=comment,youtube_url=youtube_url_check, youtube_thumbnail=youtube_thumbnail)
         post_id = new_post.post_id
         # 게시글 저장후, 상세페이지로 이동
         return redirect(reverse('post-detail',args=[post_id]))
