@@ -117,10 +117,11 @@ def delete_post(request, post_id):
         # 현재 접근한 유저와, 소유자의  id와 같은지 판별하고 데이터를 삭제한다.
         user = auth.get_user(request)
         if user.user_id != post.owner.user_id:
-            post.delete()
+            return redirect('/')
+        post.delete()
 
         # 삭제후 마이페이지로 이동
-        return redirect(reverse('set-profile',args=[post.owner.user_id]))
+        return redirect('/')
 
 
 def my_page(request, user_id):

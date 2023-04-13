@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block content %}
+<div style="width: 55%; margin: 5% auto;">
 
 <form class="profile_section" action="{% url 'set-profile' user.pk %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -48,6 +49,7 @@
         <img class="icons" src="">
     </a> -->
 </form>
+</div>
 {% endblock %}
 
 <!-- 프로필 수정을 누르면? -->
