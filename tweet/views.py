@@ -10,6 +10,12 @@ from django.core.paginator import Paginator
 from django.core.files.storage import FileSystemStorage
 import random
 
+# Youtube api
+from ytmusicapi import YTMusic
+ytmusic = YTMusic()
+
+
+
 
 def home(request):
     all_post = Post.objects.all().order_by('-create_at')
@@ -56,12 +62,16 @@ def create_post(request):
             youtube_url_check = youtube_url.split('be/')[1]
         else :
             return render(request, 'tweet/create_post.html', {'error': '유튜브 주소창을 입력해주세요.'})
+        
+        # youtube 썸네일 주소 저장
+        youtube_thumbnail = ytmusic.get_song(youtube_url_check)['videoDetails']['thumbnail']['thumbnails'][0]['url']
+        
 
         # 데이터 검사
         if not all([url, title, comment]):
             return render(request, 'tweet/create_post.html', {'error': '빈칸 없이 입력해주세요.'})
         # 게시글 저장,
-        new_post = Post.objects.create(owner=owner,url=url,title=title,comment=comment,youtube_url=youtube_url_check)
+        new_post = Post.objects.create(owner=owner,url=url,title=title,comment=comment,youtube_url=youtube_url_check, youtube_thumbnail=youtube_thumbnail)
         post_id = new_post.post_id
         # 게시글 저장후, 상세페이지로 이동
         return redirect(reverse('post-detail',args=[post_id]))

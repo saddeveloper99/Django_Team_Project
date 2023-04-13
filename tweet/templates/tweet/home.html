@@ -10,10 +10,9 @@
   {% for post in page_obj %}
   <div class="col">
     <div class="card h-100">
-{#      <img src={{ post.url }} class="card-img-top" alt="...">#}
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ post.youtube_url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      <a href={% url 'post-detail' post.pk %} style="text-decoration-line: none;">
+      <img src={{ post.youtube_thumbnail }} width=100% height=100% class="card-img-top" alt="...">
       <div class="card-body">
-        <a href={% url 'post-detail' post.pk %} style="text-decoration-line: none;">
         <h5 class="card-title main-text" style="font-size: 1.5rem;">{{ post.title }}</h5>
         <p class="card-text main-text" style="font-size: 1rem;">{{ post.comment }}</p>
         </a>
