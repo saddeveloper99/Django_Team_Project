@@ -7,6 +7,7 @@ from .models import Post
 from user.models import UserModel
 from django.urls import reverse
 from tweet.models import Post
+from comment.models import PostCommentModel
 from django.core.paginator import Paginator
 from django.core.files.storage import FileSystemStorage
 import random
@@ -43,7 +44,6 @@ def create_post(request):
 
     # 데이터 수집 및 저장
     elif request.method == 'POST':
-        url = request.POST.get('url', '')
         title = request.POST.get('title', '')
         comment = request.POST.get('comment', '')
         owner = auth.get_user(request).user_id
@@ -63,10 +63,10 @@ def create_post(request):
             return render(request, 'tweet/create_post.html', {'error': '유튜브 주소창을 입력해주세요.'})
 
         # 데이터 검사
-        if not all([url, title, comment]):
+        if not all([title, comment]):
             return render(request, 'tweet/create_post.html', {'error': '빈칸 없이 입력해주세요.'})
         # 게시글 저장,
-        new_post = Post.objects.create(owner=owner,url=url,title=title,comment=comment,youtube_url=youtube_url_check)
+        new_post = Post.objects.create(owner=owner,title=title,comment=comment,youtube_url=youtube_url_check)
         post_id = new_post.post_id
         # 게시글 저장후, 상세페이지로 이동
         return redirect(reverse('post-detail',args=[post_id]))
@@ -85,12 +85,10 @@ def set_post(request,post_id):
 
     # GET일경우 기존 작성된 내용을 참고하여 데이터 출력
     if request.method == 'GET':
-        print(post.youtube_url)
         return render(request, 'tweet/set_post.html', {'post': post})
 
     # POST의경우 전달된 데이터를 토대로 게시글 수정
     elif request.method == 'POST':
-        post.url = request.POST.get('url', '')
         post.title = request.POST.get('title', '')
         post.comment = request.POST.get('comment', '')
         post.youtube_url = request.POST.get('youtube_url','')
@@ -188,8 +186,12 @@ def post_detail(request, post_id):
         try:
             post = Post.objects.get(post_id=post_id)
         except Post.DoesNotExist:
-            return redirect('/')  # 혹시 상세페이지 접속했을 때 게시글이 없다면 redirect
-        # post_id를 받아와서 게시글 클릭하면 상세페이지로
-        return render(request, 'tweet/post_detail.html',{'post':post}) #post_id를 받아와서 게시글 클릭하면 상세페이지로
+            return redirect('/')
+
+        post_comments = PostCommentModel.objects.filter(post_id=post_id)
+        context = {'post':post,'post_comments':post_comments}
+
+        return render(request, 'tweet/post_detail.html',context) #post_id를 받아와서 게시글 클릭하면 상세페이지로
+        # 테스트 주석
 
 

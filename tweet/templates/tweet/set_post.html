@@ -15,9 +15,6 @@
     <form method="post" action="{% url 'set-post' post.post_id %}" style="margin-top: 100px">
         {% csrf_token %}
         <input type="hidden" name="post_id" value="{{ post.id }}">
-        <label for="input_url">썸네일:</label><br>
-        <textarea name="url" cols="150" rows="2">{{ post.url }}</textarea>
-        <br>
         <label for="input_title">제목:</label><br>
         <textarea name="title" cols="150" rows="2">{{ post.title }}</textarea>
         <br>
