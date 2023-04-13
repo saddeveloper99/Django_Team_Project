@@ -14,9 +14,6 @@
     <body>
     <form method="post" action="/create-post/" style="margin-top: 100px">
         {% csrf_token %}
-        <label for="input_url">썸네일:</label><br>
-        <textarea name="url" cols="150" rows="2" placeholder="썸네일 이미지 URL을 입력해주세요."></textarea>
-        <br>
         <label for="input_title">제목:</label><br>
         <textarea name="title" cols="150" rows="2" placeholder="게시글 제목을 입력해주세요."></textarea>
         <br>
