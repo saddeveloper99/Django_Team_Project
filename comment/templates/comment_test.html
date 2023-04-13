@@ -14,28 +14,34 @@
 
     function print_star(num) {
         star = "⭐".repeat(num)
-        star += "☆".repeat(5 - num)
+        {#star += "☆".repeat(5 - num)#}
         {# repeat 메소드는 다음과 같다. #}
         {# python :  star = "*" * 3  #}
         document.write(star);
     }
 </script>
 <body>
-hello comment html!<br>
-
-{{ post.post_id }} <br>
-{{ post.title }} <br>
-{{ post.comment }} <br>
-{{ post.youtube_url }} <br>
-{{ post.create_at }} <br>
-{{ post.update_at }} <br>
-
 <br>
 
 {% for index in post_comments %}
+
+
+
     {{ index.owner.username }}
     {{ index.post_comment }}
     {{ index.com_updated_at }}
+
+
+
+
+
+
+
+
+
+
+
+    {#       삭제 수정 버튼       #}
     <br>
     <span><script>print_star({{ index.comment_star }});</script></span>
     {% if  request.user.user_id == index.owner.user_id %}
@@ -47,6 +53,10 @@ hello comment html!<br>
             <button onclick="show_my_comment_set()">수정</button>
         </div>
     {% endif %}
+
+
+
+    {# 수정 누르면 나오는 div   #}
     <div id="comment_set"
          style="display: none; margin-top: 30px; margin-bottom: 30px; background-color: rgba(174,240,255,0.98); width: 1110px">
         <form method="post" action="{% url 'set-comment' index.post_comment_id %}">
@@ -70,6 +80,8 @@ hello comment html!<br>
     </div>
 
 {% endfor %}
+
+
 
 
 <br>

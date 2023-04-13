@@ -6,6 +6,7 @@ from .models import Post
 from user.models import UserModel
 from django.urls import reverse
 from tweet.models import Post
+from comment.models import PostCommentModel
 from django.core.paginator import Paginator
 from django.core.files.storage import FileSystemStorage
 import random
@@ -173,8 +174,11 @@ def post_detail(request, post_id):
         try:
             post = Post.objects.get(post_id=post_id)
         except Post.DoesNotExist:
-            return redirect('/')  # 혹시 상세페이지 접속했을 때 게시글이 없다면 redirect
-        # post_id를 받아와서 게시글 클릭하면 상세페이지로
-        return render(request, 'tweet/post_detail.html',{'post':post}) #post_id를 받아와서 게시글 클릭하면 상세페이지로
+            return redirect('/')
+
+        post_comments = PostCommentModel.objects.filter(post_id=post_id)
+        context  = {'post':post,'post_comments':post_comments}
+
+        return render(request, 'tweet/post_detail.html',context) #post_id를 받아와서 게시글 클릭하면 상세페이지로
 
 
