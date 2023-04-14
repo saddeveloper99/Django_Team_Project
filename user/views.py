@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model  # 사용자가 있는지 검사�
 from django.contrib import auth  # 사용자 auth 기능
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
+from django.urls import reverse
 import random
 
 # Create your views here.
@@ -95,4 +96,19 @@ def logout(request):
 
 
 # 팔로우 기능 구현
+def follow(request,user_id):
+    if not request.user.is_authenticated:
+        return redirect(reverse('sign-in'))
+    user = auth.get_user(request)
 
+    try:
+        owner = UserModel.objects.get(user_id=user_id)
+        user = UserModel.objects.get(user_id=user.user_id)
+    except UserModel.DoesNotExist:
+        return redirect('/')
+
+    is_following = user.follow.filter(user_id=owner.user_id).exists()
+    user.follow.remove(owner) if is_following else user.follow.add(owner)
+
+
+    return redirect(reverse('my-page',args=[user_id]))

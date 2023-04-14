@@ -2,81 +2,108 @@
 {% load static %}
 
 {% block title %}
-{{ click_user.username }}
+    {{ click_user.username }}
 {% endblock %}
 
 {% block content %}
-<style>
-    /* .icons {
-        object-fit: cover;
-        object-position: top;
-        width: 64px;
-        height: 64px;
-    } */
+    <style>
+        /* .icons {
+            object-fit: cover;
+            object-position: top;
+            width: 64px;
+            height: 64px;
+        } */
 
-</style>
-<div style="overflow: hidden; width: 70%; margin: 1% auto;">
-    <section class="profile_section">
-        <div class="profile_image">
-            {% if click_user.image %}
-            <img class="profile_image" src="{{ click_user.image }}">
-            {% elif not click_user.image %}
-            <img class="profile_image" src={% static 'tweet/image/user_image.png' %}>
-            {% endif %}
-        </div>
-        <h1 style="display:inline;" class="username">{{ click_user.username }}
-            {% if click_user == me %}
-            <img type="button" src="/static/tweet/image/edit_btn.svg" style="width: 30px; height: 30px;" onclick="location.href='{% url 'set-profile' user.pk %}'"></img>
-            {% endif %}
-        </h1>
-        <hr>
-        <span style="display:inline;" class="email_adresss">{{ click_user.email }}</span>
-        <div class="created_at">{{ click_user.date_joined }}</div>
-        <span>50 팔로우 중</span><span style="margin-left: 50px;">23 팔로워</span>
-        <hr>
-        <div style="margin-left: 200px;">{{ click_user.description }}</div>
-        <!-- 필수기능 이후 여유있으면 개인 블로그 아이콘? -->
-        <!-- <a href="https://velog.io/@rumor/DjangoA-4-%ED%8C%80-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-SA">
-            <img class="icons" src="">
-        </a> -->
-    </section>
-    <hr>
-    <div class="row row-cols-1 row-cols-md-4 g-4">
-        {% for post in posts %}
-        <div class="col">
-            <div class="card h-100">
-              <a href={% url 'post-detail' post.pk %} style="text-decoration-line: none;">
-              <img src={{ post.youtube_thumbnail }} width=100% height=100% class="card-img-top" alt="...">
-              <div class="card-body">
-                <div class="like-wrap">
-                  <div style="">
-                    <p class="like">{{ post.avg_star }}</p>⭐
-                  </div>
-                </div>
-                <h5 class="card-title main-text" style="font-size: 1.5rem;">{{ post.title }}</h5>
-                <p class="card-text main-text" style="font-size: 1rem;">{{ post.comment }}</p>
-                </a>
-                <div>
-                  <div class="post-author">
-                    <a href={% url 'my-page' post.owner.pk %} role="button" style="color: black; text-decoration-line: none;">
-                      <div class="box" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
-                          {% if post.owner.image %}
-                            <img class="profile" src={{ post.owner.image }}>
-                          {% else %}
-                            <img class="profile" src={% static 'tweet/image/user_image.png' %}>
-                          {% endif %}
-                          
-                      </div>
-                          {{ post.owner }}
-                      </a>
-                  </div>
-                </div>
-              </div>
+    </style>
+    <div style="overflow: hidden; width: 70%; margin: 1% auto;">
+        <section class="profile_section">
+            <div class="profile_image">
+                {% if click_user.image %}
+                    <img class="profile_image" src="{{ click_user.image }}">
+                {% elif not click_user.image %}
+                    <img class="profile_image" src={% static 'tweet/image/user_image.png' %}>
+                {% endif %}
             </div>
-          </div>
-        {% endfor %}
+            <h1 style="display:inline;" class="username">{{ click_user.username }}
+                {% if click_user == me %}
+                    <img type="button" src="/static/tweet/image/edit_btn.svg" style="width: 30px; height: 30px;"
+                         onclick="location.href='{% url 'set-profile' user.pk %}'"></img>
+                {% endif %}
+
+            </h1>
+            <hr>
+            <span style="display:inline;" class="email_adresss">{{ click_user.email }}</span>
+            <div class="created_at">{{ click_user.date_joined }}</div>
+            <div>
+                <span style="display: inline-block;">Following {{ following }}</span>
+                <span style="display: inline-block; margin-left: 50px;">Follower {{ follower }}</span>
+                {% if click_user != me %}
+                    {% if is_following %}
+                        <form style="display: inline-block;" method="post"
+                              action="{% url 'follow' click_user.user_id %}">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    style="background-color: white; color: black; margin-left: 50px; border-radius: 50px ">
+                                Un Follow
+                            </button>
+                        </form>
+                    {% else %}
+                        <form style="display: inline-block;" method="post"
+                              action="{% url 'follow' click_user.user_id %}">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    style="background-color: black; color: white; margin-left: 50px; border-radius: 50px ">
+                                Follow
+                            </button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <hr>
+            <div style="margin-left: 200px;">{{ click_user.description }}</div>
+            <!-- 필수기능 이후 여유있으면 개인 블로그 아이콘? -->
+            <!-- <a href="https://velog.io/@rumor/DjangoA-4-%ED%8C%80-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-SA">
+                <img class="icons" src="">
+            </a> -->
+        </section>
+        <hr>
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for post in posts %}
+                <div class="col">
+                    <div class="card h-100">
+                        <a href={% url 'post-detail' post.pk %} style="text-decoration-line: none;">
+                        <img src={{ post.youtube_thumbnail }} width=100% height=100% class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <div class="like-wrap">
+                                <div style="">
+                                    <p class="like">{{ post.avg_star }}</p>⭐
+                                </div>
+                            </div>
+                            <h5 class="card-title main-text" style="font-size: 1.5rem;">{{ post.title }}</h5>
+                            <p class="card-text main-text" style="font-size: 1rem;">{{ post.comment }}</p>
+                            </a>
+                            <div>
+                                <div class="post-author">
+                                    <a href={% url 'my-page' post.owner.pk %} role="button"
+                                       style="color: black; text-decoration-line: none;">
+                                        <div class="box" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
+                                            {% if post.owner.image %}
+                                                <img class="profile" src={{ post.owner.image }}>
+                                            {% else %}
+                                                <img class="profile" src={% static 'tweet/image/user_image.png' %}>
+                                            {% endif %}
+
+                                        </div>
+                                        {{ post.owner }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
-</div>
-<footer>
-</footer>
+    <footer>
+    </footer>
 {% endblock %}

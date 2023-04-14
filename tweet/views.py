@@ -137,13 +137,23 @@ def my_page(request, user_id):
         click_user = UserModel.objects.get(user_id=user_id)
         # 유저 id가 post의 owner(fk)인 post를 가져와서
         # 사용자 user(me), 프로필 주인(click_user)가 같을때만 수정버튼 html에 
-        me = request.user
+        me = auth.get_user(request)
+
+        #  프로필 주인을 팔로우 하고 있는 사람의 수
+        follower = UserModel.objects.filter(follow=click_user).count()
+        # 프로필 주인이 팔로우 하는 사람의 수
+        following = click_user.follow.all().count()
+        # exists 메서드 쿼리셋에 값이 있는지 판단, True and False를 반환한다.
+        is_following = me.follow.filter(user_id=click_user.user_id).exists()
 
         post = Post.objects.filter(owner=click_user).order_by('create_at')
         context = {
             'click_user': click_user,
             'posts': post,
             'me': me,
+            'follower':follower,
+            'following':following,
+            'is_following':is_following,
         }
         return render(request, 'tweet/my_page.html', context)
 
