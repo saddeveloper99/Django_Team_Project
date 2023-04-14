@@ -15,6 +15,7 @@ def set_post_star_avg(post_id):
     for i in comments:
         total_star += i.comment_star
         total_user +=1
+
     try :
         avg = round(total_star/total_user, 1)
     except ZeroDivisionError:
@@ -23,6 +24,8 @@ def set_post_star_avg(post_id):
     post.avg_star = avg
     post.save()
 
+
+# 댓글 작성 [post의경우만 사용]
 def comment_view(request,post_id):
     try:
         post = Post.objects.get(post_id=post_id)
@@ -30,7 +33,7 @@ def comment_view(request,post_id):
         return redirect('/')
 
     if request.method =='GET':
-        # 해당 포스트에 관한 모든 댓글 내역을 조회한다.
+        # get일경우 잘못된 접근이기에 홈으로 돌아갑니다.
         return redirect('/')
 
     elif request.method == 'POST':

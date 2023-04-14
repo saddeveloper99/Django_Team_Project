@@ -96,7 +96,6 @@ def set_post(request, post_id):
     if post.owner.user_id != user.user_id:
         return redirect('/')
 
-    # GET일경우 기존 작성된 내용을 참고하여 데이터 출력
     if request.method == 'GET':
         return render(request, 'tweet/set_post.html', {'post': post})
 
@@ -127,7 +126,7 @@ def delete_post(request, post_id):
             return redirect('/')
         post.delete()
 
-        # 삭제후 마이페이지로 이동
+        # 삭제후 프로필페이지로 이동
         return redirect('/')
 
 
