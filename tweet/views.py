@@ -133,8 +133,8 @@ def delete_post(request, post_id):
 def my_page(request, user_id):
     # get일때, 유저 정보와 게시글들을 불러옴
     if request.method == "GET":
-        # id로 선택한 유저의 정보를 가져옴
         click_user = UserModel.objects.get(user_id=user_id)
+        # id로 선택한 유저의 정보를 가져옴
         # 유저 id가 post의 owner(fk)인 post를 가져와서
         # 사용자 user(me), 프로필 주인(click_user)가 같을때만 수정버튼 html에 
         me = auth.get_user(request)
@@ -202,8 +202,14 @@ def set_profile(request, user_id):
     # get일때는, 유저 정보를 id로 받아와서, 수정창에 입력 돼 있게 하기.
     elif request.method == "GET":
         user = UserModel.objects.get(user_id=request.user.user_id)
-        print(user.description)
-        return render(request, 'tweet/set_profile.html', {'user': user})
+        follower_count = UserModel.objects.filter(follow=user).count()
+        following_count = user.follow.all().count()
+        context={
+            'user':user,
+            'follower_count':follower_count,
+            'following_count':following_count,
+        }
+        return render(request, 'tweet/set_profile.html', context)
 
 
 def post_detail(request, post_id):
