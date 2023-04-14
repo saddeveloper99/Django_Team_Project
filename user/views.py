@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 import random
 
-
 # Create your views here.
 def sign_up_view(request):
     if request.method == 'GET':
@@ -92,3 +91,8 @@ def sign_in_view(request):
 def logout(request):
     auth.logout(request)  # 인증 되어있는 정보를 없애기
     return redirect("/")
+
+
+
+# 팔로우 기능 구현
+
