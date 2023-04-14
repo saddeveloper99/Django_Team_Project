@@ -140,20 +140,25 @@ def my_page(request, user_id):
         me = auth.get_user(request)
 
         #  프로필 주인을 팔로우 하고 있는 사람의 수
-        follower = UserModel.objects.filter(follow=click_user).count()
+        follower_count = UserModel.objects.filter(follow=click_user).count()
         # 프로필 주인이 팔로우 하는 사람의 수
-        following = click_user.follow.all().count()
+        following_count = click_user.follow.all().count()
         # exists 메서드 쿼리셋에 값이 있는지 판단, True and False를 반환한다.
         is_following = me.follow.filter(user_id=click_user.user_id).exists()
+        follower = UserModel.objects.filter(follow=click_user)
+        following = click_user.follow.all()
+
 
         post = Post.objects.filter(owner=click_user).order_by('create_at')
         context = {
             'click_user': click_user,
             'posts': post,
             'me': me,
+            'follower_count':follower_count,
+            'following_count':following_count,
+            'is_following':is_following,
             'follower':follower,
             'following':following,
-            'is_following':is_following,
         }
         return render(request, 'tweet/my_page.html', context)
 
@@ -163,7 +168,6 @@ def set_profile(request, user_id):
     # 그리고 갱신하고 저장.
     if request.method == "POST":
         user = UserModel.objects.get(pk=user_id)
-        me = request.user
 
         try:
             profile_image = request.FILES['profile-image']
@@ -193,13 +197,7 @@ def set_profile(request, user_id):
             user.username = new_username
             user.description = request.POST.get('description', '')
             user.save()
-            post = Post.objects.filter(owner=user).order_by('create_at')
-            context = {
-                'click_user': user,
-                'posts': post,
-                'me': me,
-            }
-            return render(request, 'tweet/my_page.html', context)
+            return redirect(reverse('my-page',args=[user_id]))
 
     # get일때는, 유저 정보를 id로 받아와서, 수정창에 입력 돼 있게 하기.
     elif request.method == "GET":
@@ -216,7 +214,6 @@ def post_detail(request, post_id):
             return redirect('/')
 
         post_comments = PostCommentModel.objects.filter(post_id=post_id)
-        print(post_comments)
         context = {'post': post, 'post_comments': post_comments}
 
         return render(request, 'tweet/post_detail.html', context)  # post_id를 받아와서 게시글 클릭하면 상세페이지로

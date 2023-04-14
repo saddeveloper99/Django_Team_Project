@@ -13,8 +13,35 @@
             width: 64px;
             height: 64px;
         } */
-
+        .follow_user_image {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            object-position: center;
+            float: left;
+            border-radius: 50%;
+            margin-right: 50px;
+        }
     </style>
+    <script>
+        function show_following() {
+            var x = document.getElementById("following_list");
+            x.style.display = (x.style.display === "none") ? "block" : "none";
+            var post_card = document.getElementById("post_card");
+            post_card.style.display = (x.style.display === "none") ? "flex" : "none";
+            var follower = document.getElementById("follower_list");
+            follower.style.display = "none"
+        }
+
+        function show_follower() {
+            var x = document.getElementById("follower_list");
+            x.style.display = (x.style.display === "none") ? "block" : "none";
+            var post_card = document.getElementById("post_card");
+            post_card.style.display = (x.style.display === "none") ? "flex" : "none";
+            var following = document.getElementById("following_list");
+            following.style.display = "none"
+        }
+    </script>
     <div style="overflow: hidden; width: 70%; margin: 1% auto;">
         <section class="profile_section">
             <div class="profile_image">
@@ -35,8 +62,11 @@
             <span style="display:inline;" class="email_adresss">{{ click_user.email }}</span>
             <div class="created_at">{{ click_user.date_joined }}</div>
             <div>
-                <span style="display: inline-block;">Following {{ following }}</span>
-                <span style="display: inline-block; margin-left: 50px;">Follower {{ follower }}</span>
+                <button style="display: inline-block; border: white; background-color: white;"
+                        onclick="show_following()">Following {{ following_count }}</button>
+                <button style="display: inline-block; border: white; background-color: white; margin-left: 50px;"
+                        onclick="show_follower()">Follower {{ follower_count }}</button>
+
                 {% if click_user != me %}
                     {% if is_following %}
                         <form style="display: inline-block;" method="post"
@@ -59,6 +89,7 @@
                     {% endif %}
                 {% endif %}
             </div>
+
             <hr>
             <div style="margin-left: 200px;">{{ click_user.description }}</div>
             <!-- 필수기능 이후 여유있으면 개인 블로그 아이콘? -->
@@ -67,7 +98,46 @@
             </a> -->
         </section>
         <hr>
-        <div class="row row-cols-1 row-cols-md-4 g-4">
+
+        {##############################################################################################################################################################################}
+        <div id="following_list" style="display: none;">
+            {% for i in following %}
+                <div class="post-author" style="clear: both;">
+                    <a href={% url 'my-page' i.user_id %} role="button"
+                       style="color: black; text-decoration-line: none; display: block; margin-bottom: 10px;">
+                        <div class="box" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
+                            {% if i.image %}
+                                <img class="profile" src={{ i.image }}>
+                            {% else %}
+                                <img class="profile" src={% static 'tweet/image/user_image.png' %}>
+                            {% endif %}
+                        </div>
+                        &nbsp {{ i.username }} &nbsp {% if i.description %}✔{% endif %} &nbsp {{ i.description }}
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        {##############################################################################################################################################################################}
+
+        <div id="follower_list" style="display: none;">
+            {% for i in follower %}
+                <div class="post-author" style="clear: both;">
+                    <a href={% url 'my-page' i.user_id %} role="button"
+                       style="color: black; text-decoration-line: none; display: block; margin-bottom: 10px;">
+                        <div class="box" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
+                            {% if i.image %}
+                                <img class="profile" src={{ i.image }}>
+                            {% else %}
+                                <img class="profile" src={% static 'tweet/image/user_image.png' %}>
+                            {% endif %}
+                        </div>
+                        &nbsp {{ i.username }} &nbsp {% if i.description %}✔{% endif %} &nbsp {{ i.description }}
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        {##############################################################################################################################################################################}
+        <div class="row row-cols-1 row-cols-md-4 g-4" id="post_card">
             {% for post in posts %}
                 <div class="col">
                     <div class="card h-100">
@@ -103,6 +173,8 @@
                 </div>
             {% endfor %}
         </div>
+
+
     </div>
     <footer>
     </footer>
