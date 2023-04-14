@@ -22,13 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # https://www.youtube.com/watch?v=dWDQXvIuxP0 시크릿키 숨기기! - 🎃성철민
-# SECRET_KEY = os.environ.get("SECRET_KEY")
-# 시크릿 키를 설정하고 아마존 론칭중, DOT ENV 에러가 발생, 업데이트가 필요하다는걸알고 시도를 했지만... 결과는 실패 ㅠ_ㅠ
 SECRET_KEY = 'django-insecure-cv4im77khhn)=r!ukog7g(ehj85x=i&@z+!!=qfb+x9m%d!v7('
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
+ALLOWED_HOSTS = []
 
 
 # Application definition
