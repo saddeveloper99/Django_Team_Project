@@ -224,3 +224,5 @@ def post_detail(request, post_id):
 
         return render(request, 'tweet/post_detail.html', context)  # post_id를 받아와서 게시글 클릭하면 상세페이지로
         # 테스트 주석
+
+
