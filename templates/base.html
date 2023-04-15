@@ -3,6 +3,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -22,7 +23,8 @@
     <!-- BootStrap end-->
 
 </head>
-
+<!--    Not Found: /favicon.ico error 보정 -->
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <body>
 <div class="cover">
     <div class="nav nav-wrap">
@@ -33,59 +35,60 @@
             </div>
             <!-- 상단 로고 end -->
             {% if user.is_authenticated and user.image %}
-                <div class="menu">
-                    <li class="nav-item dropdown">
-                        <div class="box" href="#" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
-                            <img class="profile" src={{ user.image }}>
-                        </div>
-                        <a class="nav-link dropdown-toggle" href="#" role="button" style="color: white;"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ user.username }}
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu" style="padding: 5px;">
-                            <li><a class="dropdown-item" href={% url 'create-post' %}>글쓰기</a></li>
-                            <li><a class="dropdown-item" href={% url 'my-page' user.pk %}>프로필 보기</a></li>
-                            <li><a class="dropdown-item" href={% url 'logout' %}>로그아웃</a></li>
-                        </ul>
-                    </li>
-                </div>
-            {% elif user.is_authenticated and not user.image %}
-                <div class="menu">
-                    <li class="nav-item dropdown">
-                        <div class="box" href="#" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
-                            <img class="profile" src={% static 'tweet/image/user_image.png' %}>
-                        </div>
-                        <a class="nav-link dropdown-toggle" href="#" role="button" style="color: white;"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ user.username }}
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu" style="padding: 5px;">
-                            <li><a class="dropdown-item" href="/create-post/">글쓰기</a></li>
-                            <li><a class="dropdown-item" href="{% url 'my-page' user.pk %}">프로필 보기</a></li>
-                            <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
-                        </ul>
-                    </li>
-                </div>
-            {% else %}
-                <div class="menu">
-                    <div>
-                        <p style="line-height: 45px; color: white;">
-                            <a href={% url 'sign-in' %} class="sign-text">로그인하기</a> / <a href={% url 'sign-up' %} class="sign-text">회원가입 </a>
-                        </p>
+            <div class="menu">
+                <li class="nav-item dropdown">
+                    <div class="box" href="#" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
+                        <img class="profile" src={{ user.image }}>
                     </div>
+                    <a class="nav-link dropdown-toggle" href="#" role="button" style="color: white;"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ user.username }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu" style="padding: 5px;">
+                        <li><a class="dropdown-item" href={% url 'create-post' %}>글쓰기</a></li>
+                        <li><a class="dropdown-item" href={% url 'my-page' user.pk %}>프로필 보기</a></li>
+                        <li><a class="dropdown-item" href={% url 'logout' %}>로그아웃</a></li>
+                    </ul>
+                </li>
+            </div>
+            {% elif user.is_authenticated and not user.image %}
+            <div class="menu">
+                <li class="nav-item dropdown">
+                    <div class="box" href="#" style="background: #BDBDBD; float:left; margin: 0 4px 10px;">
+                        <img class="profile" src={% static 'tweet/image/user_image.png' %}>
+                    </div>
+                    <a class="nav-link dropdown-toggle" href="#" role="button" style="color: white;"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ user.username }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu" style="padding: 5px;">
+                        <li><a class="dropdown-item" href="/create-post/">글쓰기</a></li>
+                        <li><a class="dropdown-item" href="{% url 'my-page' user.pk %}">프로필 보기</a></li>
+                        <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
+                    </ul>
+                </li>
+            </div>
+            {% else %}
+            <div class="menu">
+                <div>
+                    <p style="line-height: 45px; color: white;">
+                        <a href={% url 'sign-in' %} class="sign-text">로그인하기</a> / <a href={% url 'sign-up' %}
+                        class="sign-text">회원가입 </a>
+                    </p>
                 </div>
+            </div>
             {% endif %}
         </div>
     </div>
     <div class="main-content">
         {% block content %}
-            <!-- content -->
+        <!-- content -->
         {% endblock %}
         {% block create-post %}
-            {#    게시글 작성 블록    #}
+        {# 게시글 작성 블록 #}
         {% endblock %}
         {% block set-post %}
-            {#    게시글 수정 블록    #}
+        {# 게시글 수정 블록 #}
         {% endblock %}
     </div>
 </div>
