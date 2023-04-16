@@ -34,15 +34,15 @@
         function show_my_comment_set(index) {
             var x = document.getElementById("comment_set" + index);
                 x.style.display = (x.style.display === "none") ? "block" : "none";
-                {#  자바스크립트의 삼항 연산자, === :값과 데이터가 동일한지 확인   #}
-                {#   block : 속성을 표기 , none : 속성을 표기하지 않음     #}
+                // {#  자바스크립트의 삼항 연산자, === :값과 데이터가 동일한지 확인   #}
+                // {#   block : 속성을 표기 , none : 속성을 표기하지 않음     #}
             }
 
             function print_star(num) {
                 star = "⭐".repeat(Math.round(num))
-                {#star += "☆".repeat(5 - Math.round(num))#}
-                {# repeat 메소드는 다음과 같다. #}
-                {# python :  star = "*" * 3  #}
+                // {#star += "☆".repeat(5 - Math.round(num))#}
+                // {# repeat 메소드는 다음과 같다. #}
+                // {# python :  star = "*" * 3  #}
             star = (Math.round(num) > 0) ? star : "아직 기록된 평점이 없습니다.";
                 document.write(star);
             }

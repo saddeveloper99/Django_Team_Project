@@ -144,7 +144,10 @@ def my_page(request, user_id):
         # 프로필 주인이 팔로우 하는 사람의 수
         following_count = click_user.follow.all().count()
         # exists 메서드 쿼리셋에 값이 있는지 판단, True and False를 반환한다.
-        is_following = me.follow.filter(user_id=click_user.user_id).exists()
+        try:
+            is_following = me.follow.filter(user_id=click_user.user_id).exists()
+        except :
+            is_following = False
         follower = UserModel.objects.filter(follow=click_user)
         following = click_user.follow.all()
 
